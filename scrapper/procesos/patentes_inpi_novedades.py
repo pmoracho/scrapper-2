@@ -3,16 +3,10 @@ patentes_inpi_novedades
 """
 import os
 import time
-import traceback
+import shutil
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from progressbar import ProgressBar
-from progressbar import FormatLabel
-from progressbar import Percentage
-from progressbar import Bar
-from progressbar import RotatingMarker
-from progressbar import ETA
 
 def patentes_inpi_novedades(driver,
                             parametros,
@@ -27,6 +21,40 @@ def patentes_inpi_novedades(driver,
 
     inputfile: Archivo tipo csv con numero de solicitud y tipo de documento
     """
+
+    def get_last_downloaded_file_path(dummy_dir):
+        """ Return the last modified -in this case last downloaded- file path.
+
+            This function is going to loop as long as the directory is empty.
+        """
+        while not os.listdir(dummy_dir):
+            time.sleep(1)
+        return max([os.path.join(dummy_dir, f) for f in os.listdir(dummy_dir)], key=os.path.getctime)
+
+    # method to get the downloaded file name
+    def getDownLoadedFileName(waitTime):
+        driver.execute_script("window.open()")
+        # switch to new tab
+        driver.switch_to.window(driver.window_handles[-1])
+        # navigate to chrome downloads
+        driver.get('chrome://downloads')
+        # define the endTime
+        endTime = time.time()+waitTime
+        while True:
+            try:
+                # get downloaded percentage
+                downloadPercentage = driver.execute_script(
+                    "return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('#progress').value")
+                # check if downloadPercentage is 100 (otherwise the script will keep waiting)
+                if downloadPercentage == 100:
+                    # return the file name once the download is completed
+                    return driver.execute_script("return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content  #file-link').text")
+            except:
+                pass
+            time.sleep(1)
+            if time.time() > endTime:
+                break
+
 
     def get_downloaded_filename(wait_time):
 
@@ -92,12 +120,18 @@ def patentes_inpi_novedades(driver,
                     EC.visibility_of_element_located((By.XPATH, descarga_xpath))
                 )
 
+                #file = btn.get_property("href").split("=")[2]
                 btn.click()
                 log.info("click sobre el botón de descarga")
 
-                latest_downloaded_filename = get_downloaded_filename(60)
+                latest_downloaded_filename = get_last_downloaded_file_path(outputpath)
+                _, file_extension = os.path.splitext(latest_downloaded_filename)
+                nfile = len(files) + 1
                 if latest_downloaded_filename:
-                    files.append(os.path.join(outputpath, latest_downloaded_filename))
+                    new_file = os.path.join(outputpath,
+                                            f"{solicitud_a_buscar}-{tipo_doc}-{nfile}{file_extension}")
+                    shutil.move(latest_downloaded_filename, new_file)
+                    files.append(os.path.join(outputpath, new_file))
                 else:
                     files = []
 
