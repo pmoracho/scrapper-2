@@ -1,9 +1,7 @@
-# cmdline
+# Scrapper
 
-__A simple command line script template for new proyects__
-
-Un simple template o modelo de un script de linea de comando para usar en la
-construcción de cualquier nueva herramienta de este tipo.
+Un simple y sencillo scrapper de páginas mediante **Selenium**, medianamente
+configurable y con, hasta ahora, dos rutinas básicas o modelos de captura.
 
 ### características
 
@@ -38,9 +36,9 @@ herramienta.
 * Instalar `pytest`
 
 ```
-git clone https://github.com/pmoracho/cmdline.git
+git clone https://github.com/pmoracho/scrapper-2.git
 cd cmdline
-python -m venv .venv --prompt=cmdline
+python -m venv .venv --prompt=scrapper
 
 # En Windows
 .venv\Scripts\activate.bat
@@ -63,16 +61,16 @@ python setup.py develop
 ```
 
 Esto genera un script de ejecución consistente entre plataformas que en el caso
-de este template se llamará `cmdline`. El código del mismo:
+de este template se llamará `scrapper`. El código del mismo:
 
 ```python
 #!<root path>/cmdline/.venv/bin/python
-# EASY-INSTALL-ENTRY-SCRIPT: 'cmdline','console_scripts','cmdline'
+# EASY-INSTALL-ENTRY-SCRIPT: 'scrapper','console_scripts','scrapper'
 import re
 import sys
 
 # for compatibility with easy_install; see #2198
-__requires__ = 'cmdline'
+__requires__ = 'scrapper'
 
 try:
     from importlib.metadata import distribution
@@ -87,8 +85,8 @@ def importlib_load_entry_point(spec, group, name):
     dist_name, _, _ = spec.partition('==')
 ```
 
-Con esto logramos que sea posible ejecutar `cmdline` desde `<root
-path>/cmdline/.venv/bin/python`, dónde `<root path>` será la carpeta base en
+Con esto logramos que sea posible ejecutar `scrapper` desde `<root
+path>/scrapper/.venv/bin/python`, dónde `<root path>` será la carpeta base en
 dónde hemos instalado este proyecto, la ejecución usará el interprete `python`
 del entorno virtual, algo fundamental ya que es en este entorno dónde hemos
 instalado los requerimientos de la herramienta.
@@ -116,14 +114,16 @@ pytest
 Una vez completada la instalación inicial, los primeros cambios para crear un
 nuevo proyecto a partir de este template serían:
 
-1. Modificar `setup.py`:
-    * Datos de la herramienta: `NAME`, `DESCRIPTION`, `URL`, `EMAIL`, `AUTHOR`
+1. Renombrar proyecto y carpeta del módulo `cmdline` por el nombre de la nueva herramienta
+2. Modificar `setup.py`:
+    * Losd imports de: `NAME`, `DESCRIPTION`, `URL`, `EMAIL`, `AUTHOR`, que apunten a la nueva carpeta
     * Paquetes requeridos `REQUIRED`
     * Clasificadores para **PyPy**: `setup(..., classifiers)`
     * `entry_points`, según sea la invocación del código principal del script.
-2. Configuración de versión en `cmdline/__version__.py`
-3. Editar código en `cmdline/core.py`
-4. Renombrar proyecto y carpeta del módulo `cmdline` por el nombre de la nueva herramienta
+3. Configuración de versión en `cmdline/__version__.py`
+4. Editar `cmdline/core.py` y modificar `cmdline` por el nuevo módulo
+5. Editar `cmdline/log.py`y modificar `cmdline` por el nuevo módulo
+6. Editar `cmdline/options.py`y modificar `cmdline` por el nuevo módulo
 5. Eliminar repositorio `.git` y generar una nuevo con `git init`
 
 

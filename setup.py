@@ -12,19 +12,20 @@ from shutil import rmtree
 from setuptools import find_packages, setup, Command
 
 # Package meta-data.
-from cmdline.__version__  import __version__
-from cmdline.__version__  import NAME
-from cmdline.__version__  import DESCRIPTION
-from cmdline.__version__  import URL
-from cmdline.__version__  import AUTHOR
-from cmdline.__version__  import EMAIL
-from cmdline.__version__  import VERSION
+from scrapper.__version__  import __version__
+from scrapper.__version__  import NAME
+from scrapper.__version__  import DESCRIPTION
+from scrapper.__version__  import URL
+from scrapper.__version__  import AUTHOR
+from scrapper.__version__  import EMAIL
+from scrapper.__version__  import VERSION
 
 REQUIRES_PYTHON = '>=3.6.0'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    "progressbar2==3.53.1"
+    "progressbar2==3.53.1",
+    "selenium==4.7.2"
     # 'requests', 'maya', 'records',
 ]
 
@@ -133,7 +134,7 @@ setup(
     },
     entry_points={
     'console_scripts': [
-        'cmdline=cmdline.core:main',
+        'scrapper=scrapper.core:main',
     ],
 },
 )

@@ -22,9 +22,9 @@ class Config:
 
         if self.file:
             if isinstance(self.file, str):
-              self.file = open(self.file, "rt")
+              self.file = open(self.file, "rt", encoding="utf-8")
 
-            self._load('Config')
+            self._load('general')
             if self.override_section:
                   self._load(self.override_section)
 
