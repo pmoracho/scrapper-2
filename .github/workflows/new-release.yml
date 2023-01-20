@@ -23,6 +23,12 @@ jobs:
           exe_path: ./dist/win
           upload_exe_with_name: 'scrapper-win'
 
+      - name: Upload scrapper-win
+        uses: actions/upload-artifact@v3
+        with:
+          name: scrapper-win
+          path: scrapper-win
+
   pyinstaller-linux-build:
     runs-on: ubuntu-latest
     concurrency:
@@ -38,6 +44,12 @@ jobs:
           exe_path: ./dist/linux
           upload_exe_with_name: 'scrapper-linux'
 
+      - name: Upload scrapper-linux
+        uses: actions/upload-artifact@v3
+        with:
+          name: scrapper-linux
+          path: scrapper-linux
+
   create-release:
     concurrency:
       group: create-release-${{ github.ref }}
@@ -50,8 +62,16 @@ jobs:
       contents: write
     steps:
     - uses: actions/checkout@v2
+    - name: Download scrapper-linux
+        uses: actions/download-artifact@v3
+        with:
+          name: scrapper-linux
+    - name: Download scrapper-win
+        uses: actions/download-artifact@v3
+        with:
+          name: scrapper-win
     - uses: ncipollo/release-action@v1
       with:
         allowUpdates: true
-        artifacts: "scrapper.cfg, ./dist/linux/scrapper-linux, ./dist/linux/scrapper-win"
+        artifacts: "scrapper.cfg, scrapper-win, scrapper-linux"
         bodyFile: "RELEASE.md"
