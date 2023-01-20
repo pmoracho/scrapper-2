@@ -17,7 +17,7 @@ jobs:
           spec: 'build.spec'
           requirements: 'requirements.txt'
           exe_path: ./dist/win
-          upload_exe_with_name: 'scrapper'
+          upload_exe_with_name: 'scrapper-win'
 
   pyinstaller-linux-build:
     runs-on: ubuntu-latest
@@ -29,7 +29,7 @@ jobs:
           spec: 'build.spec'
           requirements: 'requirements.txt'
           exe_path: ./dist/linux
-          upload_exe_with_name: 'scrapper'
+          upload_exe_with_name: 'scrapper-linux'
 
 
   create-release:

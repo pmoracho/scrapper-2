@@ -1,0 +1,1 @@
+Release inicial de la herramienta de Scrapping
