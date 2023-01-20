@@ -7,13 +7,12 @@ on:
 
 jobs:
 
-  concurrency:
-    group: ${{ github.workflow }}-${{ github.ref }}
-    cancel-in-progress: true
-
   pyinstaller-win-build:
-    needs: concurrency
     runs-on: windows-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
+
     steps:
       - name: Create Win Executable
         uses: sayyid5416/pyinstaller@v1
@@ -25,8 +24,10 @@ jobs:
           upload_exe_with_name: 'scrapper-win'
 
   pyinstaller-linux-build:
-    needs: concurrency
     runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - name: Create Linux Executable
         uses: sayyid5416/pyinstaller@v1
@@ -38,6 +39,9 @@ jobs:
           upload_exe_with_name: 'scrapper-linux'
 
   create-release:
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
     needs:
       - pyinstaller-win-build
       - pyinstaller-linux-build
