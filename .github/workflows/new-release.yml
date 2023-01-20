@@ -10,10 +10,6 @@ jobs:
   pyinstaller-win-build:
     runs-on: windows-latest
     steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.1
-        with: ${{ github.token }}
-
       - name: Create Win Executable
         uses: sayyid5416/pyinstaller@v1
         with:
