@@ -40,6 +40,9 @@ jobs:
           upload_exe_with_name: 'scrapper-linux'
 
   create-release:
+    needs:
+      - pyinstaller-win-build
+      - pyinstaller-linux-build
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -47,5 +50,5 @@ jobs:
     - uses: actions/checkout@v2
     - uses: ncipollo/release-action@v1
       with:
-        artifacts: "scrapper.cfg", "./dist/linux/scrapper-linux.zip", "./dist/linux/scrapper-win.zip"
+        artifacts: "scrapper.cfg, ./dist/linux/scrapper-linux.zip, ./dist/linux/scrapper-win.zip"
         bodyFile: "RELEASE.md"
