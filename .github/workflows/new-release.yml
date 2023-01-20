@@ -58,6 +58,12 @@ jobs:
       with:
         name: binaries-win
         path: ./dist/win
+
+    - name: Finding files and store to output
+      id: finding-files
+      run: |
+        echo "::set-output name=FILELIST::$(find . -name '*.*' -print)"
+
     - uses: ncipollo/release-action@v1
       with:
         allowUpdates: true
