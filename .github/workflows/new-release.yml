@@ -23,12 +23,6 @@ jobs:
           exe_path: ./dist/win
           upload_exe_with_name: 'binaries-win'
 
-      - name: Upload binaries-win
-        uses: actions/upload-artifact@v3
-        with:
-          name: binaries-win
-          path: ./dist/win
-
   pyinstaller-linux-build:
     runs-on: ubuntu-latest
     concurrency:
@@ -43,12 +37,6 @@ jobs:
           requirements: 'requirements.txt'
           exe_path: ./dist/linux
           upload_exe_with_name: 'binaries-linux'
-
-      - name: Upload binaries-linux
-        uses: actions/upload-artifact@v3
-        with:
-          name: binaries-linux
-          path: ./dist/linux
 
   create-release:
     concurrency:
@@ -73,5 +61,5 @@ jobs:
     - uses: ncipollo/release-action@v1
       with:
         allowUpdates: true
-        artifacts: "scrapper.cfg, ./dist/win, .dist/linux"
+        artifacts: "scrapper.cfg, ./dist/win/binaries-win, ./dist/linux/binaries-linux"
         bodyFile: "RELEASE.md"
