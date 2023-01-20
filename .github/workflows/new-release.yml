@@ -10,6 +10,10 @@ jobs:
   pyinstaller-win-build:
     runs-on: windows-latest
     steps:
+      - name: Cancel Previous Runs
+          uses: styfle/cancel-workflow-action
+          with: ${{ github.token }}
+
       - name: Create Win Executable
         uses: sayyid5416/pyinstaller@v1
         with:
@@ -50,7 +54,7 @@ jobs:
         id: create_release
         env:
           TAG_NAME: ${{ steps.get_tag.outputs.TAG_NAME }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
 
         if: ${{ env.TAG_NAME != ''}}
         with:
@@ -63,7 +67,7 @@ jobs:
         uses: actions/upload-release-asset@v1
         env:
           TAG_NAME: ${{ steps.get_tag.outputs.TAG_NAME }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         with:
           artifact_path: ${{ steps.pyinstaller-win-build.outputs.artifact_path }}
           upload_url: ${{ steps.create_release.outputs.upload_url }}
