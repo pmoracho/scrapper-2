@@ -1,7 +1,11 @@
+"""Manejo de configuraciones
+"""
 from configparser import ConfigParser
 from pydoc import locate
 
 class Config:
+    """Clase para manejo de configuración tipo INI
+    """
 
     DEF_CFG = {"lista_cadenas": ["jpg"],
                "lista_enteros": [20, 20, 20, 20],
@@ -22,11 +26,11 @@ class Config:
 
         if self.file:
             if isinstance(self.file, str):
-              self.file = open(self.file, "rt", encoding="utf-8")
+                self.file = open(self.file, "rt", encoding="utf-8")
 
             self._load('general')
             if self.override_section:
-                  self._load(self.override_section)
+                self._load(self.override_section)
 
     def _load(self, section):
 
@@ -35,18 +39,18 @@ class Config:
 
         for (k, v) in items_ini:
 
-          if k in self.__dict__:
-            d = self.__dict__[k]
-            if isinstance(d, list):
-                first = d[0]
-                self.__dict__[k] = list(map(locate(type(first).__name__),
-                                            [x.strip() for x in v.split(',')]))
-            else:
-                self.__dict__[k] = locate(type(d).__name__)(v)
+            if k in self.__dict__:
+                d = self.__dict__[k]
+                if isinstance(d, list):
+                    first = d[0]
+                    self.__dict__[k] = list(map(locate(type(first).__name__),
+                                                [x.strip() for x in v.split(',')]))
+                else:
+                    self.__dict__[k] = locate(type(d).__name__)(v)
 
     def __str__(self):
 
-      return f"""
+        return f"""
 -------------- Config -------------------
 lista_cadenas: {self.lista_cadenas}
 lista_enteros: {self.lista_enteros}

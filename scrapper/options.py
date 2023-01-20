@@ -2,27 +2,29 @@
 """
 import gettext
 from gettext import gettext as _
-from scrapper.__version__  import VERSION
-from scrapper.__version__  import NAME
+
 
 gettext.textdomain('scrapper')
 
-def _my_gettext(s):
+def _my_gettext(string):
     """Traducir algunas cadenas de argparse."""
     current_dict = {'usage: ': "uso: ",
                     'options': 'Opciones',
                     'optional arguments': 'Argumentos opcionales',
                     'show this help message and exit': 'Mostrar esta ayuda y salir',
                     'positional arguments': 'Argumentos posicionales',
-                    'the following arguments are required: %s': 'los siguientes argumentos son requeridos: %s'}
+                    'the following arguments are required: %s':
+                            'los siguientes argumentos son requeridos: %s'}
 
-    if s in current_dict:
-        return current_dict[s]
-    return s
+    if string in current_dict:
+        return current_dict[string]
+    return string
 
 gettext.gettext = _my_gettext
 
 import argparse
+from scrapper.__version__  import VERSION
+from scrapper.__version__  import NAME
 
 def init_argparse():
     """Inicializar parametros del programa."""
@@ -85,14 +87,14 @@ def init_argparse():
                                 "action":   "store",
                                 "dest":     "outputpath",
                                 "default":   None,
-                                "help":       _("Carpeta de outputh de los datos capturados")
+                                "help":       _("Carpeta de salida de los datos capturados")
                     },
                     "--output-file -f": {
                                 "type":     str,
                                 "action":   "store",
                                 "dest":     "outputfile",
                                 "default":    None,
-                                "help":        _("Nombre del archivo de output de los datos capturados")
+                                "help":        _("Nombre del archivo de salida de los datos capturados")
                     },
                     "--output-type -t": {
                                 "type":     str,

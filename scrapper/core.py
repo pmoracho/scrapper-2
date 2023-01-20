@@ -83,9 +83,9 @@ def return_datos(log,
         for r in datos[1:]:
             for i, h in enumerate(header_row, 0):
                 registros.append([h, r[i]])
-                l = len(max([str(c) for c in r], key=len))
-                if maxlen < l:
-                    maxlen = l
+                ln = len(max([str(c) for c in r], key=len))
+                if maxlen < ln:
+                    maxlen = ln
 
         header_row = ["Campo", "Valor"]
 
@@ -99,8 +99,8 @@ def return_datos(log,
 
     if outputfile:
         data_file = os.path.join(outputpath, outputfile)
-        with open(data_file, "w", encoding="utf-8") as f:
-            f.write(tablestr)
+        with open(data_file, "w", encoding="utf-8") as fp:
+            fp.write(tablestr)
 
         log.info(f"Data saved: {data_file}")
     else:
@@ -185,7 +185,7 @@ def main():
                           args.show_browser)
 
         else:
-            errormsg = f"No existe el proceso [{args.proceso}], verifique los procesos habilitados mediante scrapper -s "
+            errormsg = f"No existe el proceso [{args.proceso}], verifique los procesos habilitados mediante scrapper -s"
             log.error(errormsg)
             sys.exit(-1)
 
