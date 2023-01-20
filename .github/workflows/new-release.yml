@@ -16,6 +16,7 @@ jobs:
           access_token: ${{ github.token }}
 
   pyinstaller-win-build:
+    needs: avoid_redundancy
     runs-on: windows-latest
     steps:
       - name: Create Win Executable
@@ -28,6 +29,7 @@ jobs:
           upload_exe_with_name: 'scrapper-win'
 
   pyinstaller-linux-build:
+    needs: avoid_redundancy
     runs-on: ubuntu-latest
     steps:
       - name: Create Linux Executable
@@ -50,5 +52,6 @@ jobs:
     - uses: actions/checkout@v2
     - uses: ncipollo/release-action@v1
       with:
+        allowUpdates: true
         artifacts: "scrapper.cfg, ./dist/linux/scrapper-linux.zip, ./dist/linux/scrapper-win.zip"
         bodyFile: "RELEASE.md"
