@@ -7,16 +7,12 @@ on:
 
 jobs:
 
-  avoid_redundancy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.9.1
-        with:
-          access_token: ${{ github.token }}
+  concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
 
   pyinstaller-win-build:
-    needs: avoid_redundancy
+    needs: concurrency
     runs-on: windows-latest
     steps:
       - name: Create Win Executable
@@ -29,7 +25,7 @@ jobs:
           upload_exe_with_name: 'scrapper-win'
 
   pyinstaller-linux-build:
-    needs: avoid_redundancy
+    needs: concurrency
     runs-on: ubuntu-latest
     steps:
       - name: Create Linux Executable
@@ -53,5 +49,5 @@ jobs:
     - uses: ncipollo/release-action@v1
       with:
         allowUpdates: true
-        artifacts: "scrapper.cfg, ./dist/linux/scrapper-linux.zip, ./dist/linux/scrapper-win.zip"
+        artifacts: "scrapper.cfg, ./dist/linux/scrapper-linux, ./dist/linux/scrapper-win"
         bodyFile: "RELEASE.md"
