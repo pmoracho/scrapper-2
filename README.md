@@ -1,5 +1,8 @@
 # Scrapper
 
+[![Create a new Release](https://github.com/pmoracho/scrapper-2/actions/workflows/new-release.yml/badge.svg)](https://github.com/pmoracho/scrapper-2/actions/workflows/new-release.yml)
+
+
 Un simple y sencillo scrapper de páginas mediante **Selenium**, medianamente
 configurable y con, hasta ahora, dos rutinas básicas o modelos de captura.
 
