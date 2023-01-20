@@ -7,9 +7,20 @@ on:
 
 jobs:
 
+  avoid_redundancy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.1
+        with: ${{ github.token }}
+
   pyinstaller-win-build:
     runs-on: windows-latest
     steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.1
+        with: ${{ github.token }}
+
       - name: Create Win Executable
         uses: sayyid5416/pyinstaller@v1
         with:
@@ -34,46 +45,11 @@ jobs:
 
   create-release:
     runs-on: ubuntu-latest
-    needs:
-      - pyinstaller-win-build
-      - pyinstaller-linux-build
+    permissions:
+      contents: write
     steps:
-      - name: Get commit tag
-        id: get_tag
-        run:  echo "TAG_NAME=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
-
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Create Release
-        uses: actions/create-release@v1
-        id: create_release
-        env:
-          TAG_NAME: ${{ steps.get_tag.outputs.TAG_NAME }}
-          GITHUB_TOKEN: ${{ github.token }}
-
-        if: ${{ env.TAG_NAME != ''}}
-        with:
-          tag_name: ${{ env.TAG_NAME }}
-          release_name: Release ${{ env.TAG_NAME }}
-          body_path: ./RELEASE.md
-          draft: false
-
-      - name: Upload release asset
-        uses: actions/upload-release-asset@v1
-        env:
-          TAG_NAME: ${{ steps.get_tag.outputs.TAG_NAME }}
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          artifact_path: ${{ steps.pyinstaller-win-build.outputs.artifact_path }}
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          # Agrega los artifacts generados como archivos adjuntos al release
-          asset_path: |
-            ./dist/scrapper.zip
-            ./scrapper.cfg
-          asset_name: |
-            scrapper.zip
-            scrapper.cfg
-          asset_content_type: |
-            application/zip
-            text/plain
+    - uses: actions/checkout@v2
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: "scrapper.cfg"
+        bodyFile: "RELEASE.md"
