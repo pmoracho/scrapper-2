@@ -1,0 +1,76 @@
+name: Create a new Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+
+  pyinstaller-win-build:
+    runs-on: windows-latest
+    steps:
+      - name: Create Win Executable
+        uses: sayyid5416/pyinstaller@v1
+        with:
+          python_ver: '3.10'
+          spec: 'build.spec'
+          requirements: 'requirements.txt'
+          exe_path: ./dist/win
+          upload_exe_with_name: 'scrapper'
+
+  pyinstaller-linux-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Linux Executable
+        uses: sayyid5416/pyinstaller@v1
+        with:
+          python_ver: '3.9'
+          spec: 'build.spec'
+          requirements: 'requirements.txt'
+          exe_path: ./dist/linux
+          upload_exe_with_name: 'scrapper'
+
+
+  create-release:
+    runs-on: ubuntu-latest
+    needs:
+      - pyinstaller-win-build
+      - pyinstaller-linux-build
+    steps:
+      - name: Get commit tag
+        id: get_tag
+        run:  echo "TAG_NAME=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        id: create_release
+        env:
+          TAG_NAME: ${{ steps.get_tag.outputs.TAG_NAME }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+        if: ${{ env.TAG_NAME != ''}}
+        with:
+          tag_name: ${{ env.TAG_NAME }}
+          release_name: Release ${{ env.TAG_NAME }}
+          body_path: ./RELEASE.md
+          draft: false
+
+      - name: Upload release asset
+        uses: actions/upload-release-asset@v1
+        env:
+          TAG_NAME: ${{ steps.get_tag.outputs.TAG_NAME }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          artifact_path: ${{ steps.pyinstaller-win-build.outputs.artifact_path }}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          # Agrega los artifacts generados como archivos adjuntos al release
+          asset_path: |
+            ./dist/scrapper.zip
+            ./scrapper.cfg
+          asset_name: |
+            scrapper.zip
+            scrapper.cfg
+          asset_content_type: |
+            application/zip
+            text/plain
