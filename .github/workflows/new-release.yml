@@ -10,7 +10,7 @@ jobs:
   pyinstaller-win-build:
     runs-on: windows-latest
     concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
+      group: pyinstaller-win-build-${{ github.ref }}
       cancel-in-progress: true
 
     steps:
@@ -26,7 +26,7 @@ jobs:
   pyinstaller-linux-build:
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
+      group: pyinstaller-linux-build-${{ github.ref }}
       cancel-in-progress: true
     steps:
       - name: Create Linux Executable
@@ -40,7 +40,7 @@ jobs:
 
   create-release:
     concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
+      group: create-release-${{ github.ref }}
       cancel-in-progress: true
     needs:
       - pyinstaller-win-build
