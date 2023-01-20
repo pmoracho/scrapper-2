@@ -21,12 +21,12 @@ jobs:
           spec: 'build.spec'
           requirements: 'requirements.txt'
           exe_path: ./dist/win
-          upload_exe_with_name: 'scrapper-win'
+          upload_exe_with_name: 'binaries-win'
 
-      - name: Upload scrapper-win
+      - name: Upload binaries-win
         uses: actions/upload-artifact@v3
         with:
-          name: scrapper-win
+          name: binaries-win
           path: ./dist/win
 
   pyinstaller-linux-build:
@@ -42,12 +42,12 @@ jobs:
           spec: 'build.spec'
           requirements: 'requirements.txt'
           exe_path: ./dist/linux
-          upload_exe_with_name: 'scrapper-linux'
+          upload_exe_with_name: 'binaries-linux'
 
-      - name: Upload scrapper-linux
+      - name: Upload binaries-linux
         uses: actions/upload-artifact@v3
         with:
-          name: scrapper-linux
+          name: binaries-linux
           path: ./dist/linux
 
   create-release:
@@ -64,12 +64,14 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/download-artifact@v3
       with:
-        name: scrapper-linux
+        name: binaries-linux
+        path: ./dist/linux
     - uses: actions/download-artifact@v3
       with:
-        name: scrapper-win
+        name: binaries-win
+        path: ./dist/win
     - uses: ncipollo/release-action@v1
       with:
         allowUpdates: true
-        artifacts: "scrapper.cfg, ./dist/win/scrapper-win, ./dist/linux/scrapper-linux"
+        artifacts: "scrapper.cfg, ./dist/win/binaries-win, ./dist/linux/binaries-linux"
         bodyFile: "RELEASE.md"
