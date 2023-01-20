@@ -59,8 +59,9 @@ jobs:
         name: binaries-win
         path: ./dist/win
 
-    - name: Zip artifact for deployment
+    - name: Zip win artifact for deployment
       run: zip win_release.zip ./dist/win/* -r
+    - name: Zip linux artifact for deployment
       run: zip linux_release.zip ./dist/linux/* -r
 
     - name: Finding files and store to output
