@@ -88,7 +88,7 @@ def scrap(proceso,
                             outputpath=outputpath)
 
         except Exception:
-            log.exception("ejecutar scrap()")
+            log.exception("al ejecutar scrap()")
 
     else:
         log.error(f"proceso {function_name} no implementado")
