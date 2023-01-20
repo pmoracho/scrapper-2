@@ -27,7 +27,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: scrapper-win
-          path: scrapper-win
+          path: ./dist/win
 
   pyinstaller-linux-build:
     runs-on: ubuntu-latest
@@ -48,7 +48,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: scrapper-linux
-          path: scrapper-linux
+          path: ./dist/linux
 
   create-release:
     concurrency:
@@ -71,5 +71,5 @@ jobs:
     - uses: ncipollo/release-action@v1
       with:
         allowUpdates: true
-        artifacts: "scrapper.cfg, scrapper-win, scrapper-linux"
+        artifacts: "scrapper.cfg, ./dist/win/scrapper-win, ./dist/linux/scrapper-linux"
         bodyFile: "RELEASE.md"
