@@ -30,6 +30,7 @@ Herramienta de línea de comandos para extracción de datos de páginas útiles
 try:
     import sys
     import time
+    import tempfile
     import gettext
     from gettext import gettext as _
     gettext.textdomain('migrador')
@@ -73,7 +74,6 @@ def return_datos(log,
                  datos):
     """Retorna los datos capturados
     """
-
     registros = datos[1:]
     header_row = datos[0]
 
@@ -104,6 +104,8 @@ def return_datos(log,
 
         log.info(f"Data saved: {data_file}")
     else:
+        print("")
+        print("Resultados:")
         print(tablestr)
 
 def main():
@@ -157,6 +159,15 @@ def main():
 
     # Intentamos ejecutar el proceso
     #
+    if args.outputpath is None:
+        workpath = tempfile.mkdtemp()
+    else:
+        workpath = args.outputpath
+
+    if not len(os.listdir(workpath)) == 0:
+        log.error(f"La carpeta de trabajo {workpath} no está vacía")
+        sys.exit(-1)
+
     datos = []
     if args.proceso is None:
         log.error("Debe especificar un proceso a ejecutar")
@@ -170,20 +181,21 @@ def main():
                           log,
                           args.inputparam,
                           args.inputfile,
-                          args.outputpath,
+                          workpath,
                           args.show_browser)
-
 
         else:
             errormsg = f"No existe el proceso [{args.proceso}], verifique los procesos habilitados mediante scrapper -s "
             log.error(errormsg)
             sys.exit(-1)
 
+    # Retornamos los resultados del proceso
+    #
     n_rows = len(datos) - 1
     if n_rows > 0:
 
         return_datos(log,
-                    args.outputpath,
+                    workpath,
                     args.outputfile,
                     args.outputtype,
                     datos)

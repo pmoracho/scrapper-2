@@ -2,7 +2,6 @@
 """
 import gettext
 from gettext import gettext as _
-import argparse
 from scrapper.__version__  import VERSION
 from scrapper.__version__  import NAME
 
@@ -11,9 +10,10 @@ gettext.textdomain('scrapper')
 def _my_gettext(s):
     """Traducir algunas cadenas de argparse."""
     current_dict = {'usage: ': "uso: ",
-                    'optional arguments': 'argumentos opcionales',
-                    'show this help message and exit': 'mostrar esta ayuda y salir',
-                    'positional arguments': 'argumentos posicionales',
+                    'options': 'Opciones',
+                    'optional arguments': 'Argumentos opcionales',
+                    'show this help message and exit': 'Mostrar esta ayuda y salir',
+                    'positional arguments': 'Argumentos posicionales',
                     'the following arguments are required: %s': 'los siguientes argumentos son requeridos: %s'}
 
     if s in current_dict:
@@ -22,6 +22,7 @@ def _my_gettext(s):
 
 gettext.gettext = _my_gettext
 
+import argparse
 
 def init_argparse():
     """Inicializar parametros del programa."""
@@ -30,19 +31,19 @@ def init_argparse():
                                         epilog="",
                                         add_help=True,
                                         formatter_class=make_wide(argparse.HelpFormatter,
-                                                                    w=80,
-                                                                    h=48)
+                                                                    w=132,
+                                                                    h=80)
     )
 
     opciones = {    "proceso": {
                                 "nargs": "?",
                                 "default": None,
-                                "help": _("proceso de scrapping a utilizar")
+                                "help": _("Proceso de scrapping a utilizar")
                     },
                     "--version -v": {
                                 "action":    "version",
-                                "version":    VERSION,
-                                "help":        _("Mostrar el número de versión y salir")
+                                "version":   VERSION,
+                                "help":       _("Mostrar el número de versión y salir")
                     },
                     "---show-available-process -s": {
                                 "default":    False,
@@ -83,7 +84,7 @@ def init_argparse():
                                 "type":     str,
                                 "action":   "store",
                                 "dest":     "outputpath",
-                                "default":   ".",
+                                "default":   None,
                                 "help":       _("Carpeta de outputh de los datos capturados")
                     },
                     "--output-file -f": {
@@ -110,7 +111,7 @@ def init_argparse():
                                 "action":     "store_true",
                                 "dest":     "quiet",
                                 "default":    False,
-                                "help":        _("Modo silencioso sin mostrar absolutamente nada.")
+                                "help":        _("Modo silencioso sin mostrar los mensajes de progreso.")
                     },
                 }
 

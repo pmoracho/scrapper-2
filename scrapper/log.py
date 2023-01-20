@@ -27,14 +27,14 @@ class Log:
     def exception(self, msg):
 
         if not self.quiet:
-            print(f"!!!Se ha producido una excepción al {msg}")
+            print(f"!!!Se ha producido una excepción {msg}")
 
         logging.exception(msg.replace("|", " "))
 
     def error(self, msg):
 
         if not self.quiet:
-            print(f"!!!Se ha producido un error al {msg}")
+            print(f"!!!Se ha producido un error {msg}")
 
         logging.error(msg.replace("|", " "))
 

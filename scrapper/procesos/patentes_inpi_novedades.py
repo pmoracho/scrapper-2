@@ -31,54 +31,6 @@ def patentes_inpi_novedades(driver,
             time.sleep(1)
         return max([os.path.join(dummy_dir, f) for f in os.listdir(dummy_dir)], key=os.path.getctime)
 
-    # method to get the downloaded file name
-    def getDownLoadedFileName(waitTime):
-        driver.execute_script("window.open()")
-        # switch to new tab
-        driver.switch_to.window(driver.window_handles[-1])
-        # navigate to chrome downloads
-        driver.get('chrome://downloads')
-        # define the endTime
-        endTime = time.time()+waitTime
-        while True:
-            try:
-                # get downloaded percentage
-                downloadPercentage = driver.execute_script(
-                    "return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('#progress').value")
-                # check if downloadPercentage is 100 (otherwise the script will keep waiting)
-                if downloadPercentage == 100:
-                    # return the file name once the download is completed
-                    return driver.execute_script("return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content  #file-link').text")
-            except:
-                pass
-            time.sleep(1)
-            if time.time() > endTime:
-                break
-
-
-    def get_downloaded_filename(wait_time):
-
-        file_name = None
-        driver.execute_script("window.open()")
-        driver.switch_to.window(driver.window_handles[-1])
-        driver.get('chrome://downloads')
-
-        end_time = time.time() + wait_time
-        while True:
-            try:
-                file_name = driver.execute_script("return document.querySelector('downloads-manager').shadowRoot.querySelector('#downloadsList downloads-item').shadowRoot.querySelector('div#content  #file-link').text")
-                if file_name:
-                    break
-            except Exception:
-                pass
-
-            time.sleep(1)
-            if time.time() > end_time:
-                break
-
-        driver.close()
-        driver.switch_to.window(driver.window_handles[0])
-        return file_name
 
     def _get_solicitud_data(solicitud_a_buscar, tipo_doc):
 
@@ -122,7 +74,7 @@ def patentes_inpi_novedades(driver,
 
                 #file = btn.get_property("href").split("=")[2]
                 btn.click()
-                log.info("click sobre el botón de descarga")
+                log.debug("Encontramos documento y hacemos click sobre el botón de descarga")
 
                 latest_downloaded_filename = get_last_downloaded_file_path(outputpath)
                 _, file_extension = os.path.splitext(latest_downloaded_filename)
@@ -154,11 +106,14 @@ def patentes_inpi_novedades(driver,
 
         try:
             files = _get_solicitud_data(solicitud_a_buscar, tipo_doc)
-            for file in files:
-                datos.append((solicitud_a_buscar, tipo_doc, file, "OK: Decarga exitosa"))
+            if len(files) == 0:
+                datos.append((solicitud_a_buscar, tipo_doc, None, "No se ha encontrado archivo en los primeros 10 resultados"))
+            else:
+                for file in files:
+                    datos.append((solicitud_a_buscar, tipo_doc, file, "OK: Decarga exitosa"))
 
         except Exception:
-            log.exception(f"procesar solicitud {solicitud_a_buscar}")
+            log.exception(f"al procesar solicitud {solicitud_a_buscar}")
             datos.append((solicitud_a_buscar,
                           tipo_doc,
                           None,

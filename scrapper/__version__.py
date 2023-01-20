@@ -1,6 +1,6 @@
 __version__ = (0, 1, 0)
 NAME = 'scrapper'
-DESCRIPTION = 'A scrapper tool'
+DESCRIPTION = 'Una herramienta de "scrapping" de paginas web'
 URL = 'https://github.com/pmoracho/scrapper-2.git'
 EMAIL = 'pmoracho@gmail.com'
 AUTHOR = 'Patricio Moracho'
