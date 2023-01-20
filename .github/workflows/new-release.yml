@@ -11,7 +11,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Cancel Previous Runs
-          uses: styfle/cancel-workflow-action
+          uses: styfle/cancel-workflow-action@0.9.1
           with: ${{ github.token }}
 
       - name: Create Win Executable
