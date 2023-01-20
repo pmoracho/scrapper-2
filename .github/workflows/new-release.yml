@@ -62,14 +62,12 @@ jobs:
       contents: write
     steps:
     - uses: actions/checkout@v2
-    - name: Download scrapper-linux
-        uses: actions/download-artifact@v3
-        with:
-          name: scrapper-linux
-    - name: Download scrapper-win
-        uses: actions/download-artifact@v3
-        with:
-          name: scrapper-win
+    - uses: actions/download-artifact@v3
+      with:
+        name: scrapper-linux
+    - uses: actions/download-artifact@v3
+      with:
+        name: scrapper-win
     - uses: ncipollo/release-action@v1
       with:
         allowUpdates: true
