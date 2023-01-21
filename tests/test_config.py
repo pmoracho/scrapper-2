@@ -1,8 +1,9 @@
 """Test de la clase Config
 """
 import os
-import tempfile
 import sys
+import tempfile
+
 from scrapper.config import Config
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
