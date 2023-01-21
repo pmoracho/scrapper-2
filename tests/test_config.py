@@ -1,15 +1,21 @@
-import os, tempfile, sys
+"""Test de la clase Config
+"""
+import os
+import tempfile
+import sys
+from scrapper.config import Config
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from cmdline.config import Config
 
 def test_config():
+    """Test de la lectura de una configuración
+    """
 
     # Convert text into tmp file
     tmp_file = tempfile.NamedTemporaryFile(suffix=".cfg", delete=False)
     s_config = """
-[Config]
+[general]
 booleano = "True"
 lista_cadenas = jpg, png, tif
 lista_enteros = 1, 2, 3
@@ -18,14 +24,15 @@ entero = 2
 cadena = epa
 otracosa = 1
 """
-    with open(tmp_file.name, "w") as f:
-        f.write(s_config)
-    c = Config(tmp_file.name)
+    with open(tmp_file.name, "w", encoding="utf-8") as inputfile:
+        inputfile.write(s_config)
 
+    cfg = Config(tmp_file.name)
 
-    assert c.booleano == True
-    assert c.float == 100.9
-    assert c.lista_cadenas == ['jpg', 'png', 'tif']
-    assert c.lista_enteros == [1, 2, 3]
-    assert c.entero == 2
-    assert c.cadena == "epa"
+    # pylint: disable=no-member
+    assert cfg.booleano is True
+    assert cfg.float == 100.9
+    assert cfg.lista_cadenas == ['jpg', 'png', 'tif']
+    assert cfg.lista_enteros == [1, 2, 3]
+    assert cfg.entero == 2
+    assert cfg.cadena == "epa"

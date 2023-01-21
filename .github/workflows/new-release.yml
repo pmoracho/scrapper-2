@@ -7,8 +7,19 @@ on:
 
 jobs:
 
+  linter:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Python Linter
+      uses: sunnysid3up/python-linter@master
+      with:
+        source: "."
+
   pyinstaller-win-build:
-    runs-on: windows-latest
+    runs-on: windows-2022
+    needs:
+      - linter
     concurrency:
       group: pyinstaller-win-build-${{ github.ref }}
       cancel-in-progress: true
@@ -24,7 +35,9 @@ jobs:
           upload_exe_with_name: 'binaries-win'
 
   pyinstaller-linux-build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+    needs:
+      - linter
     concurrency:
       group: pyinstaller-linux-build-${{ github.ref }}
       cancel-in-progress: true
@@ -45,7 +58,7 @@ jobs:
     needs:
       - pyinstaller-win-build
       - pyinstaller-linux-build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: write
     steps:
@@ -60,14 +73,9 @@ jobs:
         path: ./dist/win
 
     - name: Zip win artifact for deployment
-      run: zip win_release.zip ./dist/win/* -r
+      run: zip win_release.zip ./dist/win/* -r -j
     - name: Zip linux artifact for deployment
-      run: zip linux_release.zip ./dist/linux/* -r
-
-    - name: Finding files and store to output
-      id: finding-files
-      run: |
-        echo "::set-output name=FILELIST::$(find . -name '*.*' -print)"
+      run: zip linux_release.zip ./dist/linux/* -r -j
 
     - uses: ncipollo/release-action@v1
       with:
