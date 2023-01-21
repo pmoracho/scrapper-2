@@ -1,7 +1,8 @@
 """Tests de una función dummy
 """
-import sys
 import os
+import sys
+
 from scrapper.core import sum_function_to_test
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
