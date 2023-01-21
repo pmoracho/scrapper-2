@@ -16,7 +16,6 @@ jobs:
           python-root-list: "."
           virtual-env: "python-lint-plus"
           use-pylint: true
-          pylint-version: 2.15.10
           use-black: false
           use-yapf: false
           use-isort: false
