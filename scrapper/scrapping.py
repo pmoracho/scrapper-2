@@ -4,6 +4,9 @@ import tempfile
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
+# pylint: disable=unused-import
+from scrapper.procesos.patentes_inpi_novedades import patentes_inpi_novedades
+
 def get_chrome_driver(download_folder, show=False):
     """Configura y retorna el driver chrome
     """
@@ -56,7 +59,6 @@ def scrap(proceso,
 
     section        = "proc:" + proceso
     function_name  = config[section]["function"]
-
     if function_name in globals():
         function = globals()[function_name]
         log.info(f"Invocando a: {function_name}")
