@@ -31,9 +31,6 @@ try:
     import sys
     import time
     import tempfile
-    import gettext
-    from gettext import gettext as _
-    gettext.textdomain('migrador')
 
     import os
     from scrapper.__version__  import NAME
@@ -48,12 +45,12 @@ try:
 
 except ImportError as err:
     modulename = err.args[0].partition("'")[-1].rpartition("'")[0]
-    print(_("No fue posible importar el modulo: %s") % modulename)
-    sys.exit(-1)
+    print(f"No fue posible importar el modulo: {modulename}")
+    sys.exit()
 
-def sum_function_to_test(a, b):
+def sum_function_to_test(op1, op2):
     """Una función de ejemplo"""
-    return a+b
+    return op1 + op2
 
 def show_procs(available_data):
     """Muestra los procesos disponibles"""
@@ -80,12 +77,11 @@ def return_datos(log,
     if outputtype == "transpose":
         registros = []
         maxlen = len(max(header_row, key=len))
-        for r in datos[1:]:
-            for i, h in enumerate(header_row, 0):
-                registros.append([h, r[i]])
-                ln = len(max([str(c) for c in r], key=len))
-                if maxlen < ln:
-                    maxlen = ln
+        for fila in datos[1:]:
+            for idx, header_col in enumerate(header_row, 0):
+                registros.append([header_col, fila[idx]])
+                lng = len(max([str(c) for c in fila], key=len))
+                maxlen = max(maxlen, lng)
 
         header_row = ["Campo", "Valor"]
 

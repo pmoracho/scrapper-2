@@ -1,3 +1,5 @@
+"""Metadados de la app
+"""
 __version__ = (0, 1, 0)
 NAME = 'scrapper'
 DESCRIPTION = 'Una herramienta de "scrapping" de paginas web'
