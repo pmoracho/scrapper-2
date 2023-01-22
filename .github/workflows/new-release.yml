@@ -34,8 +34,8 @@ jobs:
 
   pyinstaller-win-build:
     runs-on: windows-2022
-    needs:
-      - linter
+    # needs:
+    #   - linter
     concurrency:
       group: pyinstaller-win-build-${{ github.ref }}
       cancel-in-progress: true
@@ -52,8 +52,8 @@ jobs:
 
   pyinstaller-linux-build:
     runs-on: ubuntu-22.04
-    needs:
-      - linter
+    # needs:
+    #   - linter
     concurrency:
       group: pyinstaller-linux-build-${{ github.ref }}
       cancel-in-progress: true
