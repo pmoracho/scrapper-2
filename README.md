@@ -110,6 +110,11 @@ Luego, para ejecutar los tests:
 pytest
 ```
 
+## Nuevos releases
+
+1. Modificar `scrapper/__version__.py` y ajustar el número de versión
+2. Crear una nueva etiqueta con el formato `vX.X.X`, por ejemplo: `git tag v1.0.1 -f`
+3. Subir los cambios al remoto: git `push origin -f --tags`
 
 
 ## Comenzando un nuevo proyecto
