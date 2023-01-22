@@ -32,23 +32,23 @@ jobs:
   #         use-pyroma: false
 
 
-  # pyinstaller-win-build:
-  #   runs-on: windows-2022
-  #   # needs:
-  #   #   - linter
-  #   concurrency:
-  #     group: pyinstaller-win-build-${{ github.ref }}
-  #     cancel-in-progress: true
+  pyinstaller-win-build:
+    runs-on: windows-2022
+    # needs:
+    #   - linter
+    concurrency:
+      group: pyinstaller-win-build-${{ github.ref }}
+      cancel-in-progress: true
 
-  #   steps:
-  #     - name: Create Win Executable
-  #       uses: sayyid5416/pyinstaller@v1
-  #       with:
-  #         python_ver: '3.10'
-  #         spec: 'build.spec'
-  #         requirements: 'requirements.txt'
-  #         exe_path: ./dist/win
-  #         upload_exe_with_name: 'binaries-win'
+    steps:
+      - name: Create Win Executable
+        uses: sayyid5416/pyinstaller@v1
+        with:
+          python_ver: '3.10'
+          spec: 'build.spec'
+          requirements: 'requirements.txt'
+          exe_path: ./dist/win
+          upload_exe_with_name: 'binaries-win'
 
   pyinstaller-linux-build:
     runs-on: ubuntu-22.04
@@ -72,7 +72,7 @@ jobs:
       group: create-release-${{ github.ref }}
       cancel-in-progress: true
     needs:
-      # - pyinstaller-win-build
+      - pyinstaller-win-build
       - pyinstaller-linux-build
     runs-on: ubuntu-22.04
     permissions:
@@ -83,19 +83,23 @@ jobs:
       with:
         name: binaries-linux
         path: ./dist/linux
-    # - uses: actions/download-artifact@v3
-    #   with:
-    #     name: binaries-win
-    #     path: ./dist/win
+
+    - uses: actions/download-artifact@v3
+      with:
+        name: binaries-win
+        path: ./dist/win
 
     - name: Copy scrapper.cfg to dist folder
-      run: cp scrapper.cfg ./dist/linux;
+      run: cp scrapper.cfg ./dist/linux;cp scrapper.cfg ./dist/win
 
     - name: Zip linux artifact for deployment
       run: cd ./dist/linux;zip linux_release.zip ./* -r
 
+    - name: Zip win artifact for deployment
+      run: cd ./dist/win;zip win_release.zip ./* -r
+
     - uses: ncipollo/release-action@v1
       with:
         allowUpdates: true
-        artifacts: "linux_release.zip"
+        artifacts: "./dist/linux/linux_release.zip, ./dist/win/win_release.zip"
         bodyFile: "RELEASE.md"
