@@ -91,7 +91,7 @@ jobs:
     - name: Zip win artifact for deployment
       run: cp scrapper.cfg ./dist/win;cd ./dist/win/;zip win_release.zip ./* -r
     - name: Zip linux artifact for deployment
-      run: cp scrapper.cfg ./dist/linux;cd ./dist/linux;zip linux_release.zip ./* -r -j
+      run: cp scrapper.cfg ./dist/linux;cd ./dist/linux;zip linux_release.zip ./* -r
 
     - uses: ncipollo/release-action@v1
       with:
