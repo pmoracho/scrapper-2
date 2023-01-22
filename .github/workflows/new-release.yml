@@ -90,7 +90,7 @@ jobs:
         path: ./dist/win
 
     - name: Copy scrapper.cfg to dist folder
-      run: cp scrapper.cfg ./dist/linux;cp scrapper.cfg ./dist/win
+      run: cp scrapper.cfg ./dist/linux/scrapper;cp scrapper.cfg ./dist/win/scrapper
 
     - name: Zip linux artifact for deployment
       run: cd ./dist/linux;zip linux_release.zip ./* -r
