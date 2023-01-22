@@ -1,7 +1,23 @@
 """Manejo de configuraciones
 """
+import os
+import sys
 from configparser import ConfigParser
 from pydoc import locate
+
+def _find_real_path_for_cfgfile(file):
+    """Buscamos el path dónde podría estar el archivo de configuración
+    """
+    if getattr(sys, 'frozen', False):
+        application_path = os.path.dirname(sys.executable)
+    elif __file__:
+        application_path = os.path.dirname(__file__)
+
+    cfgfile = os.path.join(application_path, file)
+    if not os.path.isfile(cfgfile):
+        cfgfile = os.path.join(application_path, "../", file)
+
+    return cfgfile
 
 class Config:
     """Clase para manejo de configuración tipo INI
@@ -21,7 +37,8 @@ class Config:
         self.config = ConfigParser()
         self.__dict__.update(self.DEF_CFG)
 
-        self.file = file
+        self.cfgfile = None if file is None else _find_real_path_for_cfgfile(file)
+        self.file = self.cfgfile
         self.override_section = override_section
 
         if self.file:

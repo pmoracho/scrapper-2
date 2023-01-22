@@ -121,23 +121,23 @@ def main():
 
     # Lectura de archivo config
     #
+    # determine if application is a script file or frozen exe
+    if getattr(sys, 'frozen', False):
+        application_path = os.path.dirname(sys.executable)
+    elif __file__:
+        # application_path = os.path.dirname(__file__)
+        application_path = os.path.abspath(sys.argv[0])
+
+    log.info(f"Carpeta de inicio {application_path}")
+
     try:
-        # determine if application is a script file or frozen exe
-        if getattr(sys, 'frozen', False):
-            application_path = os.path.dirname(sys.executable)
-        elif __file__:
-            application_path = os.path.dirname(__file__)
+        cfg = Config('scrapper.cfg')
 
-        cfgfile = os.path.join(application_path, '../scrapper.cfg')
-        cfg = Config(cfgfile)
-
-    except FileNotFoundError:
-        errormsg = f"No existe el archivo de configuración ({cfgfile})"
-        print(errormsg)
-        log.error(errormsg)
+    except FileNotFoundError as err:
+        log.error(str(err))
         sys.exit(-1)
 
-    log.info(f"Cargando configuración: {cfgfile}")
+    log.info(f"Cargando configuración: {cfg.cfgfile}")
 
     # Leemos las definiciones de los procesos
     #
