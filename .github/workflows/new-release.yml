@@ -102,6 +102,7 @@ jobs:
       uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
       if: startsWith(github.ref, 'refs/tags/')
       with:
+        body_path: RELEASE.md
         files: |
           ./dist/linux/linux_release.zip
           ./dist/win/win_release.zip
