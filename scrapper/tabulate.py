@@ -674,6 +674,15 @@ _table_formats = {
         padding=1,
         with_header_hide=["lineabove"],
     ),
+    "csv": TableFormat(
+        lineabove=None,
+        linebelowheader=None,
+        linebetweenrows=None,
+        linebelow=None,
+        headerrow=DataRow("\"", "\",\"", "\""),
+        datarow=DataRow("\"", "\",\"", "\""),
+        padding=0,
+        with_header_hide=None),
 }
 
 
@@ -707,6 +716,8 @@ multiline_formats = {
     "double_outline": "double_outline",
     "fancy_outline": "fancy_outline",
 }
+
+
 
 # TODO: Add multiline support for the remaining table formats:
 #       - mediawiki: Replace \n with <br>
