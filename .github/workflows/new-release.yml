@@ -7,35 +7,8 @@ on:
 
 jobs:
 
-  # linter:
-  #   runs-on: ubuntu-22.04
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: weibullguy/python-lint-plus@v1.11.0
-  #       with:
-  #         python-root-list: "."
-  #         virtual-env: "python-lint-plus"
-  #         use-pylint: true
-  #         use-black: false
-  #         use-yapf: false
-  #         use-isort: false
-  #         use-docformatter: false
-  #         use-pycodestyle: false
-  #         use-autopep8: false
-  #         use-pydocstyle: false
-  #         use-mypy: false
-  #         use-flake8: false
-  #         use-mccabe: false
-  #         use-radon: false
-  #         use-rstcheck: false
-  #         use-check-manifest: false
-  #         use-pyroma: false
-
-
   pyinstaller-win-build:
     runs-on: windows-2022
-    # needs:
-    #   - linter
     concurrency:
       group: pyinstaller-win-build-${{ github.ref }}
       cancel-in-progress: true
@@ -52,8 +25,6 @@ jobs:
 
   pyinstaller-linux-build:
     runs-on: ubuntu-22.04
-    # needs:
-    #   - linter
     concurrency:
       group: pyinstaller-linux-build-${{ github.ref }}
       cancel-in-progress: true
@@ -108,8 +79,3 @@ jobs:
           ./dist/linux/linux_release.zip
           ./dist/win/win_release.zip
 
-    # - uses: ncipollo/release-action@v1
-    #   with:
-    #     allowUpdates: true
-    #     artifacts: "./dist/linux/linux_release.zip, ./dist/win/win_release.zip"
-    #     bodyFile: "RELEASE.md"
