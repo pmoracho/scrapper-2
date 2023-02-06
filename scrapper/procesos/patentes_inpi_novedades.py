@@ -114,7 +114,7 @@ def patentes_inpi_novedades(driver,
                     new_file = os.path.join(outputpath,
                                             f"{solicitud_a_buscar}-{tipo_doc}-{nfile}{file_extension}")
                     shutil.move(latest_downloaded_filename, new_file)
-                    log.info(f"movemos {latest_downloaded_filename} a {new_file}")
+                    log.info(f"Movemos {latest_downloaded_filename} a {new_file}")
                     files.append(os.path.join(new_file))
                 else:
                     files = []
@@ -148,7 +148,7 @@ def patentes_inpi_novedades(driver,
                     log.info(f"archivo descargado y renombrado: {file}")
                     if is_a_pdf(file):
                         datos.append((solicitud_a_buscar, tipo_doc,
-                                    file, "OK: Decarga exitosa"))
+                                    file, "OK: Descarga exitosa"))
                     else:
                         datos.append((solicitud_a_buscar, tipo_doc,
                                     file, "ERROR: El archivo no es un PDF"))
