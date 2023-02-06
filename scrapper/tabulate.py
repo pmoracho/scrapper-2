@@ -680,7 +680,7 @@ _table_formats = {
         linebetweenrows=None,
         linebelow=None,
         headerrow=DataRow("\"", "\";\"", "\""),
-        datarow=DataRow("\"" "\";\"", "\""),
+        datarow=DataRow("\"", "\";\"", "\""),
         padding=0,
         with_header_hide=None),
 }

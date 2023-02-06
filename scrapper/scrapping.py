@@ -1,11 +1,13 @@
 """Wrapper a los proceso de scrapping
 """
 import tempfile
+import os
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
 # pylint: disable=unused-import
 from scrapper.procesos.patentes_inpi_novedades import patentes_inpi_novedades
+from scrapper.procesos.zonaprop import zonaprop
 
 def get_chrome_driver(download_folder, show=False):
     """Configura y retorna el driver chrome
@@ -24,6 +26,8 @@ def get_chrome_driver(download_folder, show=False):
 
     if not show:
         chrome_options.add_argument('--headless=chrome')
+
+
 
     chrome_options.add_experimental_option('prefs',
                                             {'download.default_directory' : download_folder,
@@ -55,7 +59,10 @@ def scrap(proceso,
     else:
         workpath = outputpath
 
-    driver = get_chrome_driver(download_folder=workpath, show=show_browser)
+    temp_download_folder = os.path.join(workpath, "tmp")
+    os.makedirs(temp_download_folder, exist_ok=True)
+
+    driver = get_chrome_driver(download_folder=temp_download_folder, show=show_browser)
 
     section        = "proc:" + proceso
     function_name  = config[section]["function"]
