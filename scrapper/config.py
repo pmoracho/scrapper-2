@@ -19,6 +19,7 @@ def _find_real_path_for_cfgfile(file):
 
     return cfgfile
 
+# pylint: disable=too-few-public-methods
 class Config:
     """Clase para manejo de configuración tipo INI
     """
@@ -43,6 +44,7 @@ class Config:
 
         if self.file:
             if isinstance(self.file, str):
+                # pylint: disable=consider-using-with
                 self.file = open(self.file, "rt", encoding="utf-8")
 
             self._load('general')
@@ -54,19 +56,19 @@ class Config:
         self.config.read_file(self.file)
         items_ini = self.config.items(section)
 
-        for (k, v) in items_ini:
+        for (k, value) in items_ini:
 
             if k in self.__dict__:
-                d = self.__dict__[k]
-                if isinstance(d, list):
-                    first = d[0]
+                dct = self.__dict__[k]
+                if isinstance(dct, list):
+                    first = dct[0]
                     self.__dict__[k] = list(map(locate(type(first).__name__),
-                                                [x.strip() for x in v.split(',')]))
+                                                [x.strip() for x in value.split(',')]))
                 else:
-                    self.__dict__[k] = locate(type(d).__name__)(v)
+                    self.__dict__[k] = locate(type(dct).__name__)(value)
 
     def __str__(self):
-
+        # pylint: disable=no-member
         return f"""
 -------------- Config -------------------
 lista_cadenas: {self.lista_cadenas}

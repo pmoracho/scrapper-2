@@ -26,13 +26,12 @@ scrapper
 Herramienta de línea de comandos para extracción de datos de páginas útiles
 
 """
+import sys
+import time
+import tempfile
+import os
 
 try:
-    import sys
-    import time
-    import tempfile
-
-    import os
     from scrapper.__version__  import NAME
     from scrapper.__version__  import DESCRIPTION
     from scrapper.__version__  import VERSION
@@ -80,7 +79,8 @@ def return_datos(log,
         for fila in datos[1:]:
             for idx, header_col in enumerate(header_row, 0):
                 registros.append([header_col, fila[idx]])
-                lng = len(max([str(c) for c in fila], key=len))
+
+                lng = max(str(len(c)) for c in fila)
                 maxlen = max(maxlen, lng)
 
         header_row = ["Campo", "Valor"]
@@ -95,8 +95,8 @@ def return_datos(log,
 
     if outputfile:
         data_file = os.path.join(outputpath, outputfile)
-        with open(data_file, "w", encoding="utf-8") as fp:
-            fp.write(tablestr)
+        with open(data_file, "w", encoding="utf-8") as out:
+            out.write(tablestr)
 
         log.info(f"Data saved: {data_file}")
     else:
@@ -133,8 +133,8 @@ def main():
     try:
         cfg = Config('scrapper.cfg')
 
-    except FileNotFoundError as err:
-        log.error(str(err))
+    except FileNotFoundError as _err:
+        log.error(str(_err))
         sys.exit(-1)
 
     log.info(f"Cargando configuración: {cfg.cfgfile}")
@@ -181,6 +181,7 @@ def main():
                           args.show_browser)
 
         else:
+            # pylint: disable=line-too-long
             errormsg = f"No existe el proceso [{args.proceso}], verifique los procesos habilitados mediante scrapper -s"
             log.error(errormsg)
             sys.exit(-1)

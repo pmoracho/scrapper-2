@@ -1,3 +1,5 @@
+"""Setup script
+"""
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -45,15 +47,16 @@ here = os.path.abspath(os.path.dirname(__file__))
 # Note: this will only work if 'README.md' is present in your MANIFEST.in file!
 try:
     with io.open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
-        long_description = '\n' + f.read()
+        LONG_DESCRIPTION = '\n' + f.read()
 except FileNotFoundError:
-    long_description = DESCRIPTION
+    LONG_DESCRIPTION = DESCRIPTION
 
 # Load the package's __version__.py module as a dictionary.
 about = {}
 if not VERSION:
-    project_slug = NAME.lower().replace("-", "_").replace(" ", "_")
-    with open(os.path.join(here, project_slug, '__version__.py')) as f:
+    PROJECT_SLUG = NAME.lower().replace("-", "_").replace(" ", "_")
+    with open(os.path.join(here, PROJECT_SLUG, '__version__.py'), encoding="utf-8") as f:
+        # pylint: disable=exec-usedcd scrapp
         exec(f.read(), about)
 else:
     about['__version__'] = VERSION
@@ -66,17 +69,13 @@ class UploadCommand(Command):
     user_options = []
 
     @staticmethod
-    def status(s):
+    def status(status_msg):
         """Prints things in bold."""
-        print('\033[1m{0}\033[0m'.format(s))
-
-    def initialize_options(self):
-        pass
-
-    def finalize_options(self):
-        pass
+        print(f'\033[1m{status_msg}\033[0m')
 
     def run(self):
+        """run
+        """
         try:
             self.status('Removing previous builds…')
             rmtree(os.path.join(here, 'dist'))
@@ -84,13 +83,14 @@ class UploadCommand(Command):
             pass
 
         self.status('Building Source and Wheel (universal) distribution…')
-        os.system('{0} setup.py sdist bdist_wheel --universal'.format(sys.executable))
+        os.system(f'{sys.executable} setup.py sdist bdist_wheel --universal')
 
         self.status('Uploading the package to PyPI via Twine…')
         os.system('twine upload dist/*')
 
         self.status('Pushing git tags…')
-        os.system('git tag v{0}'.format(about['__version__']))
+        version = about['__version__']
+        os.system(f'git tag v{version}')
         os.system('git push --tags')
 
         sys.exit()
@@ -101,7 +101,7 @@ setup(
     name=NAME,
     version=about['__version__'],
     description=DESCRIPTION,
-    long_description=long_description,
+    long_description=LONG_DESCRIPTION,
     long_description_content_type='text/markdown',
     author=AUTHOR,
     author_email=EMAIL,
