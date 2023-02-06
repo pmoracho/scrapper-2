@@ -2,7 +2,7 @@
 
 * Implementamos salida a `CSV` con separador por `;`
 * Validamos por firma que los archivos descargados sean `pdf`
-* Incorporamos a modo de ejemplo camptura de datos de **zonaprop**
+* Incorporamos a modo de ejemplo captura de datos de **zonaprop**
 
 # Despliegue
 
@@ -18,9 +18,9 @@
 
 # Ejecución
 
-## Para la captrua de novedades del **INPI**
+## Para la captura de novedades del **INPI**
 
-Se necesita un archivo `csv` (separado por `;`) con los siguentes datos:
+Se necesita un archivo `csv` (separado por `;`) con los siguientes datos:
 
 * Número de solicitud
 * Nombre del documento (tal como aparece en la página)
@@ -32,15 +32,15 @@ resumen. La ejecución sería algo así:
 
 La salida en `resumen.csv` sería algo así:
 
-    "20190103146";"EPA";"tmp/20190103146-EPA-1.pdf";"OK: Decarga exitosa"
+    "20190103146";"EPA";"tmp/20190103146-EPA-1.pdf";"OK: Descarga exitosa"
     "20190103074";"Arxxxxxxx";"";"No se ha encontrado archivo en los primeros 10 resultados"
     "20190102902";"Titulo";"";"No se ha encontrado archivo en los primeros 10 resultados"
-    "20190102881";"ACLARACION PREVIA";"tmp/20190102881-ACLARACION PREVIA-1.pdf";"OK: Decarga exitosa"
-    "20190102794";"ACLARACION PREVIA";"tmp/20190102794-ACLARACION PREVIA-1.pdf";"OK: Decarga exitosa"
-    "20190102793";"ACLARACION PREVIA";"tmp/20190102793-ACLARACION PREVIA-1.pdf";"OK: Decarga exitosa"
+    "20190102881";"ACLARACION PREVIA";"tmp/20190102881-ACLARACION PREVIA-1.pdf";"OK: Descarga exitosa"
+    "20190102794";"ACLARACION PREVIA";"tmp/20190102794-ACLARACION PREVIA-1.pdf";"OK: Descarga exitosa"
+    "20190102793";"ACLARACION PREVIA";"tmp/20190102793-ACLARACION PREVIA-1.pdf";"OK: Descarga exitosa"
     "20190102675";"Examen de Fondo";"";"No se ha encontrado archivo en los primeros 10 resultados"
     "20190102351";"ACLARACION PREVIA";"";"No se ha encontrado archivo en los primeros 10 resultados"
-    "20190102008";"ACLARACION PREVIA";"tmp/20190102008-ACLARACION PREVIA-1.pdf";"OK: Decarga exitosa"
+    "20190102008";"ACLARACION PREVIA";"tmp/20190102008-ACLARACION PREVIA-1.pdf";"OK: Descarga exitosa"
 
 
 # Detalle del `build`
