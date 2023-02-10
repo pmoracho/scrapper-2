@@ -31,10 +31,10 @@ def get_chrome_driver(download_folder, show=False):
 
     chrome_options.add_experimental_option('prefs',
                                             {'download.default_directory' : download_folder,
-                                            'service_log_path' : download_folder,
                                             "download.prompt_for_download": False,
-                                            "directory_upgrade": True,
-                                            'safebrowsing.enabled': False,
+                                            "download.directory_upgrade": True,
+                                            'service_log_path' : download_folder,
+                                            'safebrowsing.enabled': True,
                                             'safebrowsing.disable_download_protection': True
                                             })
 
