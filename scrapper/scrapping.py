@@ -23,7 +23,7 @@ def get_chrome_driver(download_folder, show=False):
     chrome_options.add_argument("--disable-extensions")
     chrome_options.add_argument('--disable-infobars')
     chrome_options.add_argument("--window-size=1920,1080")
-
+    chrome_options.add_argument("--download-directory={0}".format(download_folder))
     if not show:
         chrome_options.add_argument('--headless=chrome')
 
