@@ -52,7 +52,7 @@ def get_chrome_driver(download_folder, show=False):
         "safebrowsing.enabled": True,
         'safebrowsing.disable_download_protection': True
     })
-
+    chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(options=chrome_options)
 
     return driver
