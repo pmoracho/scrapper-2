@@ -155,14 +155,7 @@ def main():
 
     # Intentamos ejecutar el proceso
     #
-    if args.outputpath is None:
-        workpath = tempfile.mkdtemp()
-    else:
-        workpath = args.outputpath
-
-    if not len(os.listdir(workpath)) == 0:
-        log.error(f"La carpeta de trabajo {workpath} no está vacía")
-        sys.exit(-1)
+    workpath = tempfile.mkdtemp()
 
     datos = []
     if args.proceso is None:

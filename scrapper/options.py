@@ -82,13 +82,6 @@ def init_argparse():
                                 "default":   None,
                                 "help":      _("Nombre del archivo de entrada de datos")
                     },
-                    "--output-path -o": {
-                                "type":     str,
-                                "action":   "store",
-                                "dest":     "outputpath",
-                                "default":   None,
-                                "help":       _("Carpeta de salida de los datos capturados")
-                    },
                     "--output-file -f": {
                                 "type":     str,
                                 "action":   "store",
