@@ -12,9 +12,12 @@ def dummy_download_file(driver,
                         outputpath=None):
     """Descarga dummy de prueba
     """
-    log.info(f"LDescarga dummy de un archivo en la carpeta {outputpath}")
+    log.info(f"Descarga dummy de un archivo en la carpeta {outputpath}")
 
     options = Options()
+
+    options.add_argument('--headless=chrome')
+
     options.add_experimental_option("prefs", {
         "download.default_directory": outputpath,
         "download.prompt_for_download": False,
