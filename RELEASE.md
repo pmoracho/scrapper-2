@@ -1,13 +1,13 @@
 # Descripción
 
-* Implementamos salida a `CSV` con separador por `;`
-* Validamos por firma que los archivos descargados sean `pdf`
-* Incorporamos a modo de ejemplo captura de datos de **zonaprop**
+* La descarga ahora es en carpetas temporales de sistema
+* implementamos `dummy_download_file` para prueba de descarga
+* Quitamos algunos mensajes de error del driver windows
 
 # Despliegue
 
 * Descargar `win_release.zip` o `linux_release.zip`
-* Descomprimir el contenido, se genera una carpeta `scrapper`
+* Descomprimir el contenidwo, se genera una carpeta `scrapper`
 * La versión para `linux` puede que requiera hacer: `cd scrapper;chmod +x scrapper`
 * **Importante**:
     - descargar driver chrome desde [aqui][chrome]
@@ -28,7 +28,7 @@ Se necesita un archivo `csv` (separado por `;`) con los siguientes datos:
 Además se debe contar con una carpeta vacía dónde descargar los archivos y el
 resumen. La ejecución sería algo así:
 
-    scrapper patentes_inpi_novedades -i ejemplo_solicitudes.txt -o tmp/ -f resumen.csv -t csv
+    scrapper patentes_inpi_novedades -i ejemplo_solicitudes.txt -f resumen.csv -t csv
 
 La salida en `resumen.csv` sería algo así:
 
