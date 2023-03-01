@@ -115,7 +115,7 @@ def patentes_inpi_novedades(driver,
                         f"{solicitud_a_buscar}-{tipo_doc}-{nfile}{file_extension}"
                     )
                     shutil.move(latest_downloaded_filename, new_file)
-                    log.info(f"Movemos {latest_downloaded_filename} a {new_file}")
+                    log.debug(f"Movemos {latest_downloaded_filename} a {new_file}")
                     files.append(os.path.join(new_file))
                 else:
                     files = []
