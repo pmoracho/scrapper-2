@@ -8,6 +8,7 @@ from selenium.webdriver.chrome.options import Options
 # pylint: disable=unused-import
 from scrapper.procesos.patentes_inpi_novedades import patentes_inpi_novedades
 from scrapper.procesos.zonaprop import zonaprop
+from scrapper.procesos.dummy import dummy_download_file
 
 def get_chrome_driver(download_folder, show=False):
     """Configura y retorna el driver chrome
@@ -17,13 +18,14 @@ def get_chrome_driver(download_folder, show=False):
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
     chrome_options.add_argument('--disable-gpu')
+    chrome_options.add_argument("--disable-popup-blocking")
     # pylint: disable=line-too-long
     chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36")
     chrome_options.add_argument('--start-maximized')
     chrome_options.add_argument("--disable-extensions")
     chrome_options.add_argument('--disable-infobars')
     chrome_options.add_argument("--window-size=1920,1080")
-    chrome_options.add_argument("--download-directory={0}".format(download_folder))
+    chrome_options.add_argument(f"--download-directory={download_folder}")
     if not show:
         chrome_options.add_argument('--headless=chrome')
 
@@ -41,6 +43,7 @@ def get_chrome_driver(download_folder, show=False):
     driver = webdriver.Chrome(options=chrome_options)
 
     return driver
+
 
 
 def scrap(proceso,
@@ -62,6 +65,7 @@ def scrap(proceso,
     temp_download_folder = os.path.join(workpath, "tmp")
     os.makedirs(temp_download_folder, exist_ok=True)
 
+    log.info(f"Out Folder: {temp_download_folder}")
     driver = get_chrome_driver(download_folder=temp_download_folder, show=show_browser)
 
     section        = "proc:" + proceso

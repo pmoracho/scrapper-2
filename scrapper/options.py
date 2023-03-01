@@ -2,6 +2,8 @@
 """
 import gettext
 from gettext import gettext as _
+from scrapper.__version__  import VERSION
+from scrapper.__version__  import NAME
 
 
 gettext.textdomain('scrapper')
@@ -23,8 +25,6 @@ def _my_gettext(string):
 gettext.gettext = _my_gettext
 
 import argparse
-from scrapper.__version__  import VERSION
-from scrapper.__version__  import NAME
 
 def init_argparse():
     """Inicializar parametros del programa."""
@@ -33,8 +33,8 @@ def init_argparse():
                                         epilog="",
                                         add_help=True,
                                         formatter_class=make_wide(argparse.HelpFormatter,
-                                                                    w=132,
-                                                                    h=80)
+                                                                width=132,
+                                                                height=80)
     )
 
     opciones = {    "proceso": {
@@ -94,7 +94,7 @@ def init_argparse():
                                 "action":   "store",
                                 "dest":     "outputfile",
                                 "default":    None,
-                                "help":        _("Nombre del archivo de salida de los datos capturados")
+                                "help": _("Nombre del archivo de salida de los datos capturados")
                     },
                     "--output-type -t": {
                                 "type":     str,
@@ -113,7 +113,7 @@ def init_argparse():
                                 "action":     "store_true",
                                 "dest":     "quiet",
                                 "default":    False,
-                                "help":        _("Modo silencioso sin mostrar los mensajes de progreso.")
+                                "help": _("Modo silencioso sin mostrar los mensajes de progreso.")
                     },
                 }
 
@@ -127,12 +127,12 @@ def init_argparse():
 
 
 
-def make_wide(formatter, w=120, h=40):
+def make_wide(formatter, width=120, height=40):
     """Return a wider HelpFormatter, if possible."""
     try:
         # https://stackoverflow.com/a/5464440
         # beware: "Only the name of this class is considered a public API."
-        kwargs = {'width': w, 'max_help_position': h}
+        kwargs = {'width': width, 'max_help_position': height}
         formatter(None, **kwargs)
         return lambda prog: formatter(prog, **kwargs)
     except TypeError:

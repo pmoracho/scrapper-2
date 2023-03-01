@@ -5,6 +5,7 @@ import os
 import time
 import shutil
 import re
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -111,8 +112,10 @@ def patentes_inpi_novedades(driver,
 
                 nfile = len(files) + 1
                 if latest_downloaded_filename:
-                    new_file = os.path.join(outputpath,
-                                            f"{solicitud_a_buscar}-{tipo_doc}-{nfile}{file_extension}")
+                    new_file = os.path.join(
+                        outputpath,
+                        f"{solicitud_a_buscar}-{tipo_doc}-{nfile}{file_extension}"
+                    )
                     shutil.move(latest_downloaded_filename, new_file)
                     log.info(f"Movemos {latest_downloaded_filename} a {new_file}")
                     files.append(os.path.join(new_file))
@@ -141,8 +144,12 @@ def patentes_inpi_novedades(driver,
         try:
             files = _get_solicitud_data(solicitud_a_buscar, tipo_doc)
             if len(files) == 0:
-                datos.append((solicitud_a_buscar, tipo_doc, None,
-                             "No se ha encontrado archivo en los primeros 10 resultados de la grilla de novedades"))
+                datos.append(
+                    (solicitud_a_buscar,
+                    tipo_doc,
+                    None,
+                    "No se ha encontrado archivo en la primer pagina de novedades")
+                )
             else:
                 for file in files:
                     log.info(f"archivo descargado y renombrado: {file}")
