@@ -188,15 +188,16 @@ def main():
 
     # Retornamos los resultados del proceso
     #
-    n_rows = len(datos) - 1
-    if n_rows > 0:
+    n_rows = 0
+    if datos:
+        n_rows = len(datos) - 1
+        if n_rows > 0:
 
-        return_datos(log,
-                    workpath,
-                    args.outputfile,
-                    args.outputtype,
-                    datos)
-
+            return_datos(log,
+                        workpath,
+                        args.outputfile,
+                        args.outputtype,
+                        datos)
 
     elapsed_time = time.strftime('%H:%M:%S', time.gmtime(round(time.time() - start_time, 2)))
     log.info(f"Se salvaron {n_rows} filas en {elapsed_time}")
