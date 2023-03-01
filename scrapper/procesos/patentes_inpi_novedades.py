@@ -35,18 +35,16 @@ def patentes_inpi_novedades(driver,
     inputfile: Archivo tipo csv con numero de solicitud y tipo de documento
     """
 
-    def get_last_downloaded_file_path(dummy_dir, time_to_wait=30):
+    def get_last_downloaded_file_path(dummy_dir, extension="pdf", time_to_wait=30):
         """ Return the last modified -in this case last downloaded- file path.
             This function is going to loop as long as the directory is empty
             or reched a timeout
         """
-        time_counter = 0
+        elapsed_time = 0
 
-        while not [f for f in os.listdir(dummy_dir) if re.match(r'.*\.pdf', f)]:
-            time.sleep(1)
-            time_counter += 1
-            if time_counter > time_to_wait:
-                break
+        while not any(os.path.isfile(os.path.join(dummy_dir, f)) and extension in f for f in os.listdir(dummy_dir)) and elapsed_time < time_to_wait:
+            time.sleep(1)  # esperar 1 segundo
+            elapsed_time += 1
 
         return max([os.path.join(dummy_dir, f) for f in os.listdir(dummy_dir)],
                     key=os.path.getctime)
