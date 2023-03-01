@@ -150,7 +150,7 @@ def patentes_inpi_novedades(driver,
                 )
             else:
                 for file in files:
-                    log.info(f"archivo descargado y renombrado: {file}")
+                    log.debug(f"archivo descargado y renombrado: {file}")
                     if is_a_pdf(file):
                         datos.append((solicitud_a_buscar, tipo_doc,
                                     file, "OK: Descarga exitosa"))

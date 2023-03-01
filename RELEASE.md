@@ -6,8 +6,8 @@
 
 # Despliegue
 
-* Descargar `win_release.zip` o `linux_release.zip`
-* Descomprimir el contenidwo, se genera una carpeta `scrapper`
+* Descargar `win_release.zip` o `linux_release.zip` según el sistema dónde correrá
+* Descomprimir el contenido, se genera una carpeta `scrapper`
 * La versión para `linux` puede que requiera hacer: `cd scrapper;chmod +x scrapper`
 * **Importante**:
     - descargar driver chrome desde [aqui][chrome]
@@ -25,10 +25,26 @@ Se necesita un archivo `csv` (separado por `;`) con los siguientes datos:
 * Número de solicitud
 * Nombre del documento (tal como aparece en la página)
 
-Además se debe contar con una carpeta vacía dónde descargar los archivos y el
-resumen. La ejecución sería algo así:
+Por ejemplo algo así:
 
-    scrapper patentes_inpi_novedades -i ejemplo_solicitudes.txt -f resumen.csv -t csv
+    20190103146;EPA
+    20190103074;Arxxxxxxx
+    20190102902;Titulo
+    20190102881;ACLARACION PREVIA
+    20190102794;ACLARACION PREVIA
+    20190102793;ACLARACION PREVIA
+    20190102675;Examen de Fondo
+    20190102351;ACLARACION PREVIA
+    20190102008;ACLARACION PREVIA
+
+Además se debería contar con una carpeta vacía dónde generar el resumen de la
+operación que luego se puede importar para ubicar los archivos descargados o el
+error al intentarlo. **Atención**: los archivos se descargan en una carpeta
+temporal del sistema creada especialmente por el proceso.
+
+La ejecución sería algo así:
+
+    scrapper patentes_inpi_novedades -i ejemplo_solicitudes.txt -f carpeta_accesible_por_mecanus\resumen.csv -t csv
 
 La salida en `resumen.csv` sería algo así:
 
