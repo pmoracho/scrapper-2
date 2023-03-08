@@ -1,6 +1,8 @@
 # Descripción
 
-* El `outputpath` se hereda de la carpeta del `inputfile`
+* El `outputpath` se hereda de la carpeta del `outputfile`
+* Github Action: No generamos más versión para linux
+* Mejoramos algunos `log`
 
 # Despliegue
 

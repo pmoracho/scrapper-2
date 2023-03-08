@@ -98,7 +98,7 @@ def return_datos(log,
         with open(data_file, "w", encoding="utf-8") as out:
             out.write(tablestr)
 
-        log.info(f"Data saved: {data_file}")
+        log.info(f"Resultado del proceso en: {data_file}")
     else:
         print("")
         print("Resultados:")

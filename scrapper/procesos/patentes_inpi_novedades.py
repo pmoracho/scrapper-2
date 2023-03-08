@@ -168,5 +168,6 @@ def patentes_inpi_novedades(driver,
         i = i + 1
 
     driver.quit()
+    log.debug("Fin del proceso de descarga, retornamos los datos.")
 
     return datos
