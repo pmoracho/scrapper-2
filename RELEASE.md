@@ -1,8 +1,6 @@
 # Descripción
 
-* La descarga ahora es en carpetas temporales de sistema
-* implementamos `dummy_download_file` para prueba de descarga
-* Quitamos algunos mensajes de error del driver windows
+* El `outputpath` se hereda de la carpeta del `inputfile`
 
 # Despliegue
 

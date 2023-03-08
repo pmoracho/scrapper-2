@@ -155,7 +155,9 @@ def main():
 
     # Intentamos ejecutar el proceso
     #
-    workpath = tempfile.mkdtemp()
+    workpath = os.path.dirname(args.inputfile)
+    if workpath is None or workpath == "":
+        workpath = tempfile.mkdtemp()
 
     datos = []
     if args.proceso is None:

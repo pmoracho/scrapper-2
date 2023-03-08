@@ -1,6 +1,6 @@
 """Metadados de la app
 """
-__version__ = (1, 0, 21)
+__version__ = (1, 0, 23)
 NAME = 'scrapper'
 DESCRIPTION = 'Una herramienta de "scrapping" de paginas web'
 URL = 'https://github.com/pmoracho/scrapper-2.git'
