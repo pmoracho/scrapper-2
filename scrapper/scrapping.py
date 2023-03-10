@@ -54,6 +54,7 @@ def get_chrome_driver(download_folder, show=False):
     })
     chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
     driver = webdriver.Chrome(options=chrome_options)
+    log.info("Configuración del driver exitosa")
 
     return driver
 
@@ -77,7 +78,7 @@ def scrap(proceso,
     temp_download_folder = os.path.join(workpath, "tmp")
     os.makedirs(temp_download_folder, exist_ok=True)
 
-    log.info(f"Out Folder: {temp_download_folder}")
+    log.info(f"Carpeta de descarga: {temp_download_folder}")
     driver = get_chrome_driver(download_folder=temp_download_folder, show=show_browser)
 
     section        = "proc:" + proceso

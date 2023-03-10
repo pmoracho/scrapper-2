@@ -23,20 +23,20 @@ jobs:
           exe_path: ./dist/win
           upload_exe_with_name: 'binaries-win'
 
-  pyinstaller-linux-build:
-    runs-on: ubuntu-22.04
-    concurrency:
-      group: pyinstaller-linux-build-${{ github.ref }}
-      cancel-in-progress: true
-    steps:
-      - name: Create Linux Executable
-        uses: sayyid5416/pyinstaller@3f23c8bb6c4afd3f7886806e62baac781f468009
-        with:
-          python_ver: '3.10'
-          spec: 'build.spec'
-          requirements: 'requirements.txt'
-          exe_path: ./dist/linux
-          upload_exe_with_name: 'binaries-linux'
+  # pyinstaller-linux-build:
+  #   runs-on: ubuntu-22.04
+  #   concurrency:
+  #     group: pyinstaller-linux-build-${{ github.ref }}
+  #     cancel-in-progress: true
+  #   steps:
+  #     - name: Create Linux Executable
+  #       uses: sayyid5416/pyinstaller@3f23c8bb6c4afd3f7886806e62baac781f468009
+  #       with:
+  #         python_ver: '3.10'
+  #         spec: 'build.spec'
+  #         requirements: 'requirements.txt'
+  #         exe_path: ./dist/linux
+  #         upload_exe_with_name: 'binaries-linux'
 
   create-release:
     concurrency:
@@ -44,7 +44,7 @@ jobs:
       cancel-in-progress: true
     needs:
       - pyinstaller-win-build
-      - pyinstaller-linux-build
+      # - pyinstaller-linux-build
     runs-on: ubuntu-22.04
     permissions:
       contents: write
@@ -55,19 +55,21 @@ jobs:
         name: binaries-linux
         path: ./dist/linux
 
-    - uses: actions/download-artifact@v3
-      with:
-        name: binaries-win
-        path: ./dist/win
+    # - uses: actions/download-artifact@v3
+    #   with:
+    #     name: binaries-win
+    #     path: ./dist/win
 
-    - name: Copy scrapper.cfg to dist folder
-      run: cp scrapper.cfg ./dist/linux/scrapper;cp scrapper.cfg ./dist/win/scrapper
-
-    - name: Zip linux artifact for deployment
-      run: cd ./dist/linux;zip linux_release.zip ./* -r
-
+    - name: Copy scrapper.cfg to dist folder (Win)
+      run: cp scrapper.cfg ./dist/win/scrapper
     - name: Zip win artifact for deployment
       run: cd ./dist/win;zip win_release.zip ./* -r
+
+    # - name: Copy scrapper.cfg to dist folder (Linux)
+    #   run: cp scrapper.cfg ./dist/linux/scrapper
+    # - name: Zip linux artifact for deployment
+    #   run: cd ./dist/linux;zip linux_release.zip ./* -r
+
 
     - name: Release
       uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844
@@ -76,6 +78,8 @@ jobs:
         generate_release_notes: true
         body_path: RELEASE.md
         files: |
-          ./dist/linux/linux_release.zip
           ./dist/win/win_release.zip
+        # files: |
+        #   ./dist/linux/linux_release.zip
+        #   ./dist/win/win_release.zip
 

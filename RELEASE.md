@@ -1,8 +1,8 @@
 # Descripción
 
-* La descarga ahora es en carpetas temporales de sistema
-* implementamos `dummy_download_file` para prueba de descarga
-* Quitamos algunos mensajes de error del driver windows
+* El `outputpath` se hereda de la carpeta del `outputfile`
+* Github Action: No generamos más versión para linux
+* Mejoramos algunos `log`
 
 # Despliegue
 
@@ -48,15 +48,23 @@ La ejecución sería algo así:
 
 La salida en `resumen.csv` sería algo así:
 
-    "20190103146";"EPA";"tmp/20190103146-EPA-1.pdf";"OK: Descarga exitosa"
+    "20190103146";"EPA";"carpeta_accesible_por_mecanus/20190103146-EPA-1.pdf";"OK: Descarga exitosa"
     "20190103074";"Arxxxxxxx";"";"No se ha encontrado archivo en los primeros 10 resultados"
     "20190102902";"Titulo";"";"No se ha encontrado archivo en los primeros 10 resultados"
-    "20190102881";"ACLARACION PREVIA";"tmp/20190102881-ACLARACION PREVIA-1.pdf";"OK: Descarga exitosa"
-    "20190102794";"ACLARACION PREVIA";"tmp/20190102794-ACLARACION PREVIA-1.pdf";"OK: Descarga exitosa"
-    "20190102793";"ACLARACION PREVIA";"tmp/20190102793-ACLARACION PREVIA-1.pdf";"OK: Descarga exitosa"
+    "20190102881";"ACLARACION PREVIA";"carpeta_accesible_por_mecanus/20190102881-ACLARACION PREVIA-1.pdf";"OK: Descarga exitosa"
+    "20190102794";"ACLARACION PREVIA";"carpeta_accesible_por_mecanus/20190102794-ACLARACION PREVIA-1.pdf";"OK: Descarga exitosa"
+    "20190102793";"ACLARACION PREVIA";"carpeta_accesible_por_mecanus/20190102793-ACLARACION PREVIA-1.pdf";"OK: Descarga exitosa"
     "20190102675";"Examen de Fondo";"";"No se ha encontrado archivo en los primeros 10 resultados"
     "20190102351";"ACLARACION PREVIA";"";"No se ha encontrado archivo en los primeros 10 resultados"
-    "20190102008";"ACLARACION PREVIA";"tmp/20190102008-ACLARACION PREVIA-1.pdf";"OK: Descarga exitosa"
+    "20190102008";"ACLARACION PREVIA";"carpeta_accesible_por_mecanus/20190102008-ACLARACION PREVIA-1.pdf";"OK: Descarga exitosa"
+
+**Importante**
+
+* Crear previamente una carpeta vacía dónde salvar la descarga y los resultados
+* Esto `-f carpeta_accesible_por_mecanus\resumen.csv` configura:
+    - Dónde se salvan el archivo con el resumen del proceso
+    - Los archivos descargados
+
 
 
 # Detalle del `build`
