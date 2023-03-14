@@ -64,7 +64,6 @@ def show_procs(available_data):
     print(tablestr)
 
 def return_datos(log,
-                 outputpath,
                  outputfile,
                  outputtype,
                  datos):
@@ -94,11 +93,10 @@ def return_datos(log,
     )
 
     if outputfile:
-        data_file = os.path.join(outputpath, outputfile)
-        with open(data_file, "w", encoding="utf-8") as out:
+        with open(outputfile, "w", encoding="utf-8") as out:
             out.write(tablestr)
 
-        log.info(f"Resultado del proceso en: {data_file}")
+        log.info(f"Resultado del proceso en: {outputfile}")
     else:
         print("")
         print("Resultados:")
@@ -157,7 +155,7 @@ def main():
     # Intentamos ejecutar el proceso
     #
     if args.outputfile:
-        workpath = os.path.abspath(os.path.dirname(args.outputfile))
+        workpath = os.path.dirname(os.path.abspath(args.outputfile))
         if workpath is None or workpath == "":
             workpath = tempfile.mkdtemp()
     else:
@@ -194,8 +192,7 @@ def main():
         if n_rows > 0:
 
             return_datos(log,
-                        workpath,
-                        args.outputfile,
+                        os.path.abspath(args.outputfile),
                         args.outputtype,
                         datos)
 
