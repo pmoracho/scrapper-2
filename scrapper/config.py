@@ -8,6 +8,7 @@ from pydoc import locate
 def _find_real_path_for_cfgfile(file):
     """Buscamos el path dónde podría estar el archivo de configuración
     """
+    application_path = None
     if getattr(sys, 'frozen', False):
         application_path = os.path.dirname(sys.executable)
     elif __file__:
@@ -17,6 +18,7 @@ def _find_real_path_for_cfgfile(file):
     if not os.path.isfile(cfgfile):
         cfgfile = os.path.join(application_path, "../", file)
 
+    cfgfile = os.path.abspath(cfgfile)
     return cfgfile
 
 # pylint: disable=too-few-public-methods
