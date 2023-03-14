@@ -50,15 +50,15 @@ jobs:
       contents: write
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/download-artifact@v3
-      with:
-        name: binaries-linux
-        path: ./dist/linux
-
     # - uses: actions/download-artifact@v3
     #   with:
-    #     name: binaries-win
-    #     path: ./dist/win
+    #     name: binaries-linux
+    #     path: ./dist/linux
+
+    - uses: actions/download-artifact@v3
+      with:
+        name: binaries-win
+        path: ./dist/win
 
     - name: Copy scrapper.cfg to dist folder (Win)
       run: cp scrapper.cfg ./dist/win/scrapper
