@@ -1,14 +1,11 @@
 # Descripción
 
-* El `outputpath` se hereda de la carpeta del `outputfile`
-* Github Action: No generamos más versión para linux
-* Mejoramos algunos `log`
+* Implementación del nuevo proceso `inpi_novedades` (notificaciones)
 
 # Despliegue
 
-* Descargar `win_release.zip` o `linux_release.zip` según el sistema dónde correrá
+* Descargar `win_release.zip`
 * Descomprimir el contenido, se genera una carpeta `scrapper`
-* La versión para `linux` puede que requiera hacer: `cd scrapper;chmod +x scrapper`
 * **Importante**:
     - descargar driver chrome desde [aqui][chrome]
     - Solo si en el equipo ya tenemos un navegador chrome, buscar el driver que
@@ -18,45 +15,46 @@
 
 # Ejecución
 
-## Para la captura de novedades del **INPI**
+## Para la captura de notificaciones del **INPI**
 
-Se necesita un archivo `csv` (separado por `;`) con los siguientes datos:
+Se necesita indicar los siguientes parámetros:
 
-* Número de solicitud
-* Nombre del documento (tal como aparece en la página)
+Para el login mediante AFIP:
 
-Por ejemplo algo así:
+* cuit/cuil
+* contraseña
 
-    20190103146;EPA
-    20190103074;Arxxxxxxx
-    20190102902;Titulo
-    20190102881;ACLARACION PREVIA
-    20190102794;ACLARACION PREVIA
-    20190102793;ACLARACION PREVIA
-    20190102675;Examen de Fondo
-    20190102351;ACLARACION PREVIA
-    20190102008;ACLARACION PREVIA
+Para la consulta:
+
+* fecha desde
+* fecha hasta
+
 
 Además se debería contar con una carpeta vacía dónde generar el resumen de la
 operación que luego se puede importar para ubicar los archivos descargados o el
-error al intentarlo. **Atención**: los archivos se descargan en una carpeta
-temporal del sistema creada especialmente por el proceso.
+error al intentarlo.
 
 La ejecución sería algo así:
 
-    scrapper patentes_inpi_novedades -i ejemplo_solicitudes.txt -f carpeta_accesible_por_mecanus\resumen.csv -t csv
+    scrapper inpi_novedades -p "cuil/cuit|contraseña|fecha desde|fecha hasta" -f carpeta_accesible_por_mecanus\resumen.csv -t csv
 
 La salida en `resumen.csv` sería algo así:
 
-    "20190103146";"EPA";"carpeta_accesible_por_mecanus/20190103146-EPA-1.pdf";"OK: Descarga exitosa"
-    "20190103074";"Arxxxxxxx";"";"No se ha encontrado archivo en los primeros 10 resultados"
-    "20190102902";"Titulo";"";"No se ha encontrado archivo en los primeros 10 resultados"
-    "20190102881";"ACLARACION PREVIA";"carpeta_accesible_por_mecanus/20190102881-ACLARACION PREVIA-1.pdf";"OK: Descarga exitosa"
-    "20190102794";"ACLARACION PREVIA";"carpeta_accesible_por_mecanus/20190102794-ACLARACION PREVIA-1.pdf";"OK: Descarga exitosa"
-    "20190102793";"ACLARACION PREVIA";"carpeta_accesible_por_mecanus/20190102793-ACLARACION PREVIA-1.pdf";"OK: Descarga exitosa"
-    "20190102675";"Examen de Fondo";"";"No se ha encontrado archivo en los primeros 10 resultados"
-    "20190102351";"ACLARACION PREVIA";"";"No se ha encontrado archivo en los primeros 10 resultados"
-    "20190102008";"ACLARACION PREVIA";"carpeta_accesible_por_mecanus/20190102008-ACLARACION PREVIA-1.pdf";"OK: Descarga exitosa"
+    "4215067";"Boletin de Marcas";"10/03/2023 06:01:50 a.m.";"/home/pmoracho/Proyectos/scrapper-2/tmp/4215067-Boletin de Marcas.pdf";"Ok. Descarga exitosa."
+    "4214712";"Boletin de Marcas";"10/03/2023 06:01:50 a.m.";"/home/pmoracho/Proyectos/scrapper-2/tmp/4214712-Boletin de Marcas.pdf";"Ok. Descarga exitosa."
+    "4214711";"Boletin de Marcas";"10/03/2023 06:01:50 a.m.";"/home/pmoracho/Proyectos/scrapper-2/tmp/4214711-Boletin de Marcas.pdf";"Ok. Descarga exitosa."
+    "4214710";"Boletin de Marcas";"10/03/2023 06:01:50 a.m.";"/home/pmoracho/Proyectos/scrapper-2/tmp/4214710-Boletin de Marcas.pdf";"Ok. Descarga exitosa."
+    "4214709";"Boletin de Marcas";"10/03/2023 06:01:50 a.m.";"/home/pmoracho/Proyectos/scrapper-2/tmp/4214709-Boletin de Marcas.pdf";"Ok. Descarga exitosa."
+    "4214708";"Boletin de Marcas";"10/03/2023 06:01:50 a.m.";"/home/pmoracho/Proyectos/scrapper-2/tmp/4214708-Boletin de Marcas.pdf";"Ok. Descarga exitosa."
+    "4213559";"Boletin de Marcas";"10/03/2023 06:01:50 a.m.";"/home/pmoracho/Proyectos/scrapper-2/tmp/4213559-Boletin de Marcas.pdf";"Ok. Descarga exitosa."
+    "4213558";"Boletin de Marcas";"10/03/2023 06:01:50 a.m.";"/home/pmoracho/Proyectos/scrapper-2/tmp/4213558-Boletin de Marcas.pdf";"Ok. Descarga exitosa."
+    "4213557";"Boletin de Marcas";"10/03/2023 06:01:50 a.m.";"/home/pmoracho/Proyectos/scrapper-2/tmp/4213557-Boletin de Marcas.pdf";"Ok. Descarga exitosa."
+    "4213556";"Boletin de Marcas";"10/03/2023 06:01:50 a.m.";"/home/pmoracho/Proyectos/scrapper-2/tmp/4213556-Boletin de Marcas.pdf";"Ok. Descarga exitosa."
+    "4213554";"Boletin de Marcas";"10/03/2023 06:01:50 a.m.";"/home/pmoracho/Proyectos/scrapper-2/tmp/4213554-Boletin de Marcas.pdf";"Ok. Descarga exitosa."
+    "4213553";"Boletin de Marcas";"10/03/2023 06:01:50 a.m.";"/home/pmoracho/Proyectos/scrapper-2/tmp/4213553-Boletin de Marcas.pdf";"Ok. Descarga exitosa."
+    "4213551";"Boletin de Marcas";"10/03/2023 06:01:50 a.m.";"/home/pmoracho/Proyectos/scrapper-2/tmp/4213551-Boletin de Marcas.pdf";"Ok. Descarga exitosa."
+    "4213550";"Boletin de Marcas";"10/03/2023 06:01:50 a.m.";"/home/pmoracho/Proyectos/scrapper-2/tmp/4213550-Boletin de Marcas.pdf";"Ok. Descarga exitosa."
+    "4213543";"Boletin de Marcas";"10/03/2023 06:01:50 a.m.";"/home/pmoracho/Proyectos/scrapper-2/tmp/4213543-Boletin de Marcas.pdf";"Ok. Descarga exitosa."
 
 **Importante**
 
