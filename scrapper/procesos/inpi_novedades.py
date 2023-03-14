@@ -43,7 +43,8 @@ def inpi_novedades(driver,
     def _download_files(rows):
 
         temp_download_folder = os.path.join(outputpath, "tmp")
-        files = []
+        files = [("Solicitud", "Tipo", "Fecha", "Archivo", "Estatus")]
+
         for row in rows:
 
             cols = row.find_elements(By.TAG_NAME, "td")
@@ -95,7 +96,7 @@ def inpi_novedades(driver,
         url = parametros["url_home"]
         log.debug(f"Get: {url}")
         driver.get(url)
-        datos = ["Solicitud", "Tipo", "Fecha", "Archivo", "Estatus"]
+
 
         log.debug(parametros["btn_inicio_sesion"])
         btn_inicio = WebDriverWait(driver, 10).until(
@@ -157,6 +158,7 @@ def inpi_novedades(driver,
                 (By.XPATH, parametros["grilla"]))
         )
 
+        datos = None
         number_of_rows = len(rows)
         log.info(f"Encontramos {number_of_rows} notificaciones")
         if number_of_rows > 0:

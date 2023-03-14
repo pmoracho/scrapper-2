@@ -36,7 +36,7 @@ error al intentarlo.
 
 La ejecución sería algo así:
 
-    scrapper inpi_novedades -p "cuil/cuit|contraseña|fecha desde|fecha hasta" -f carpeta_accesible_por_mecanus\resumen.csv -t csv
+    scrapper inpi_novedades -p "cuil/cuit|contraseña|fecha desde|fecha hasta" -f carpeta_accesible_por_mecanus\resumen.csv -t csv -l carpeta_accesible_por_mecanus\scrapper.log
 
 La salida en `resumen.csv` sería algo así:
 
