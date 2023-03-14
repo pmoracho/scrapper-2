@@ -112,7 +112,7 @@ def main():
     cmdparser = init_argparse()
     args = cmdparser.parse_args()
 
-    log = Log(outputpath=args.logfile,
+    log = Log(filename=args.logfile,
               loglevel=args.loglevel,
               quiet=args.quiet
     )
@@ -122,6 +122,7 @@ def main():
     # Lectura de archivo config
     #
     # determine if application is a script file or frozen exe
+    application_path = None
     if getattr(sys, 'frozen', False):
         application_path = os.path.dirname(sys.executable)
     elif __file__:
@@ -155,8 +156,11 @@ def main():
 
     # Intentamos ejecutar el proceso
     #
-    workpath = os.path.dirname(args.outputfile)
-    if workpath is None or workpath == "":
+    if args.outputfile:
+        workpath = os.path.abspath(os.path.dirname(args.outputfile))
+        if workpath is None or workpath == "":
+            workpath = tempfile.mkdtemp()
+    else:
         workpath = tempfile.mkdtemp()
 
     datos = []
@@ -167,6 +171,7 @@ def main():
         start_time = time.time()
         proceso = [p[0] for p in available_procs if p[0] == args.proceso][0]
         if proceso:
+
             datos = scrap(proceso,
                           cfg.config,
                           log,
