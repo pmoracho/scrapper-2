@@ -1,6 +1,7 @@
 # Descripción
 
-* Implementación del nuevo proceso `inpi_novedades` (notificaciones)
+* Nuevos parámetros para `inpi_novedades` (expediente y tipo de notificación)
+* Parametrización de los
 
 # Despliegue
 
@@ -26,8 +27,10 @@ Para el login mediante AFIP:
 
 Para la consulta:
 
-* fecha desde
-* fecha hasta
+* fecha desde: formato `DD/MM/YYYY`
+* fecha hasta: formato `DD/MM/YYYY`
+* expediente: tal como figura el dropbox del la página, eventualmente "*" = todos
+* tipo de notificacion: tal como figura el dropbox del la página, eventualmente "*" = todos
 
 
 Además se debería contar con una carpeta vacía dónde generar el resumen de la
@@ -36,7 +39,7 @@ error al intentarlo.
 
 La ejecución sería algo así:
 
-    scrapper inpi_novedades -p "cuil/cuit|contraseña|fecha desde|fecha hasta" -f carpeta_accesible_por_mecanus\resumen.csv -t csv -l carpeta_accesible_por_mecanus\scrapper.log
+    scrapper inpi_novedades -p "cuil/cuit|contraseña|fecha desde|fecha hasta|*|*" -f carpeta_accesible_por_mecanus\resumen.csv -t csv -l carpeta_accesible_por_mecanus\scrapper.log
 
 La salida en `resumen.csv` sería algo así:
 

@@ -7,6 +7,7 @@ import shutil
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 
@@ -23,7 +24,7 @@ def inpi_novedades(driver,
     iputparam: <cuit/cuil>|<password>|<fecha_desde>|<fecha_hasta>
     """
 
-    def get_last_downloaded_file_path(dummy_dir, extension="pdf", time_to_wait=30):
+    def get_last_downloaded_file_path(dummy_dir, extension="pdf", time_to_wait=50):
         """ Return the last modified -in this case last downloaded- file path.
             This function is going to loop as long as the directory is empty
             or reched a timeout
@@ -33,49 +34,58 @@ def inpi_novedades(driver,
             time.sleep(1)  # esperar 1 segundo
             elapsed_time += 1
 
-        files = os.listdir(dummy_dir)
+        files = [os.path.join(dummy_dir, f) for f in os.listdir(dummy_dir) if extension in f]
         if len(files) == 0:
             return None
 
-        return max([os.path.join(dummy_dir, f) for f in files],
-                    key=os.path.getctime)
+        return max(files, key=os.path.getctime)
 
     def _download_files(rows):
 
         temp_download_folder = os.path.join(outputpath, "tmp")
         files = [("Solicitud", "Tipo", "Fecha", "Archivo", "Estatus")]
+        total = len(rows)
 
-        for row in rows:
+        for i, row in enumerate(rows, 1):
 
             cols = row.find_elements(By.TAG_NAME, "td")
             solicitud = cols[0].text
             tipo = cols[1].get_attribute("textContent")
             fecha = cols[3].text
 
-            log.info(f"Solicitud: {solicitud} tipo: {tipo}")
+            log.info(f"[{i}/{total}] Solicitud: {solicitud} tipo: {tipo}")
 
-            cols[4].click()
-
-            log.debug(
-                    "Encontramos documento y hacemos click sobre el botón de descarga")
 
             try:
+                cols[4].click()
+                log.debug("Encontramos documento y hacemos click sobre el botón de descarga")
                 latest_downloaded_filename = get_last_downloaded_file_path(
-                    temp_download_folder)
-                _, file_extension = os.path.splitext(
-                    latest_downloaded_filename)
+                    temp_download_folder,
+                    "pdf",
+                    big_timeout)
 
-                new_file = os.path.join(
-                    outputpath,
-                    f"{solicitud}-{tipo}{file_extension}"
-                )
-                shutil.move(latest_downloaded_filename, new_file)
-                log.debug(f"Movemos {latest_downloaded_filename} a {new_file}")
-                files.append((solicitud,
-                              tipo,
-                              fecha,
-                              new_file,
-                              "Ok. Descarga exitosa."))
+                if latest_downloaded_filename:
+                    _, file_extension = os.path.splitext(
+                        latest_downloaded_filename)
+
+                    new_file = os.path.join(
+                        outputpath,
+                        f"{solicitud}-{tipo}{file_extension}"
+                    )
+                    shutil.move(latest_downloaded_filename, new_file)
+                    log.debug(f"Movemos {latest_downloaded_filename} a {new_file}")
+                    files.append((solicitud,
+                                tipo,
+                                fecha,
+                                new_file,
+                                "Ok. Descarga exitosa."))
+                else:
+                    files.append((solicitud,
+                                tipo,
+                                fecha,
+                                new_file,
+                                "Error. No se pudo completar la descarga"))
+
 
             # pylint: disable=broad-exception-caught
             except Exception as err:
@@ -99,14 +109,14 @@ def inpi_novedades(driver,
 
 
         log.debug(parametros["btn_inicio_sesion"])
-        btn_inicio = WebDriverWait(driver, 10).until(
+        btn_inicio = WebDriverWait(driver, small_timeout).until(
             EC.visibility_of_element_located(
                 (By.XPATH, parametros["btn_inicio_sesion"]))
         )
         btn_inicio.click()
 
         log.debug("completamos usuario")
-        txt_usuario = WebDriverWait(driver, 10).until(
+        txt_usuario = WebDriverWait(driver, small_timeout).until(
             EC.visibility_of_element_located(
                 (By.ID, parametros["txt_usuario"]))
         )
@@ -114,7 +124,7 @@ def inpi_novedades(driver,
         txt_usuario.send_keys(Keys.RETURN)
 
         log.debug("completamos contraseña")
-        txt_password = WebDriverWait(driver, 10).until(
+        txt_password = WebDriverWait(driver, small_timeout).until(
             EC.visibility_of_element_located(
                 (By.ID, parametros["txt_password"]))
         )
@@ -123,7 +133,7 @@ def inpi_novedades(driver,
         log.debug("Realizamos login")
 
         log.debug("Cambiamos a MARVAL")
-        btn_cambiar = WebDriverWait(driver, 10).until(
+        btn_cambiar = WebDriverWait(driver, small_timeout).until(
             EC.visibility_of_element_located(
                 (By.XPATH, parametros["btn_cambiar"]))
         )
@@ -133,12 +143,12 @@ def inpi_novedades(driver,
         url = parametros["url_notificaciones"]
         driver.get(url)
 
-        txt_desde = WebDriverWait(driver, 50).until(
+        txt_desde = WebDriverWait(driver, big_timeout).until(
             EC.visibility_of_element_located(
                 (By.ID, parametros["txt_desde_id"]))
         )
 
-        txt_hasta = WebDriverWait(driver, 50).until(
+        txt_hasta = WebDriverWait(driver, big_timeout).until(
             EC.visibility_of_element_located(
                 (By.ID, parametros["txt_hasta_id"]))
         )
@@ -146,14 +156,22 @@ def inpi_novedades(driver,
         txt_desde.send_keys(fecha_desde)
         txt_hasta.send_keys(fecha_hasta)
 
-        btn_buscar = WebDriverWait(driver, 50).until(
+        if expediente != "*":
+            select = Select(driver.find_element("id", parametros["expediente_combo"]))
+            select.select_by_visible_text(expediente)
+
+        if notificacion != "*":
+            select = Select(driver.find_element("id", parametros["notificacion_combo"]))
+            select.select_by_visible_text(notificacion)
+
+        btn_buscar = WebDriverWait(driver, big_timeout).until(
             EC.visibility_of_element_located(
                 (By.XPATH, parametros["btn_buscar"]))
         )
         log.debug("Realizamos busqueda")
         btn_buscar.click()
 
-        rows = WebDriverWait(driver, 50).until(
+        rows = WebDriverWait(driver, big_timeout).until(
             EC.visibility_of_all_elements_located(
                 (By.XPATH, parametros["grilla"]))
         )
@@ -166,10 +184,19 @@ def inpi_novedades(driver,
 
         return datos
 
-    cuil_cuit, password, fecha_desde, fecha_hasta = inputparam.split("|")
-    log.info(f"Leyendo novedades desde: {fecha_desde} hasta {fecha_hasta}")
+    big_timeout =int(parametros["big_timeout"])
+    small_timeout =int(parametros["small_timeout"])
 
-    datos = _novedades()
+    cuil_cuit, password, fecha_desde, fecha_hasta, expediente, notificacion = inputparam.split("|")
+    log.info(f"Leyendo {expediente}-{notificacion} desde: {fecha_desde} hasta {fecha_hasta}")
+
+    datos = None
+    try:
+        datos = _novedades()
+    # pylint: disable=broad-exception-caught
+    except Exception as err:
+        log.exception(str(err))
+
     driver.quit()
     log.debug("Fin del proceso de descarga, retornamos los datos.")
 
