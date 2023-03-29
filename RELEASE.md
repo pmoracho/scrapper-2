@@ -1,14 +1,17 @@
 # Descripción
 
-* Nuevos parámetros para `inpi_novedades` (expediente y tipo de notificación)
-* Parametrización de los
+* Fix del problema de identificación de archivo descargado cuando se cumple timeout
+* Aumentamos el `big_timeout` en 120 segundos
+* Tramiento de excepción al salvar resultados (`PermissionError`)
+* Agregamos más info al log en modo debug
 
 # Despliegue
 
+* Requerimieto inicial: Tener instalado un navegador **Chrome**
 * Descargar `win_release.zip`
 * Descomprimir el contenido, se genera una carpeta `scrapper`
 * **Importante**:
-    - descargar driver chrome desde [aqui][chrome]
+    - descargar driver chrome desde [aqui][chrome] (verificar que la versión sea consistente con la del navegador)
     - Solo si en el equipo ya tenemos un navegador chrome, buscar el driver que
       coincida con la versión del primero.
     - Descomprimir el ejecutable en la misma carpeta de `scrapper`
