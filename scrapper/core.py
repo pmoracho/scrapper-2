@@ -93,10 +93,15 @@ def return_datos(log,
     )
 
     if outputfile:
-        with open(outputfile, "w", encoding="utf-8") as out:
-            out.write(tablestr)
+        try:
+            with open(outputfile, "w", encoding="utf-8") as out:
+                out.write(tablestr)
 
-        log.info(f"Resultado del proceso en: {outputfile}")
+            log.info(f"Resultado del proceso en: {outputfile}")
+
+        except Exception as err:
+            log.exception(str(_err))
+
     else:
         print("")
         print("Resultados:")
