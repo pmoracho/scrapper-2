@@ -24,17 +24,26 @@ def inpi_novedades(driver,
     iputparam: <cuit/cuil>|<password>|<fecha_desde>|<fecha_hasta>
     """
 
-    def get_last_downloaded_file_path(dummy_dir, extension="pdf", time_to_wait=50):
+    def get_last_downloaded_file_path(dummy_dir, contains="pdf", time_to_wait=50):
         """ Return the last modified -in this case last downloaded- file path.
             This function is going to loop as long as the directory is empty
             or reched a timeout
         """
         elapsed_time = 0
-        while not any(os.path.isfile(os.path.join(dummy_dir, f)) and extension in f for f in os.listdir(dummy_dir)) and elapsed_time < time_to_wait:
+        contains = contains.lower()
+        while not any(os.path.isfile(os.path.join(dummy_dir, f)) and contains == f.lower() for f in os.listdir(dummy_dir)) and elapsed_time < time_to_wait:
+            log.debug(f"contains: *{contains}*")
+            log.debug("Archivos:" + ", ".join(os.listdir(dummy_dir)))
             time.sleep(1)  # esperar 1 segundo
             elapsed_time += 1
 
-        files = [os.path.join(dummy_dir, f) for f in os.listdir(dummy_dir) if extension in f]
+        files = [os.path.join(dummy_dir, f) for f in os.listdir(dummy_dir) if contains == f.lower()]
+        if len(files) > 0:
+            if len(files) > 1:
+                log.error("Se ha encontrado más de un archivo en la carpeta de descarga")
+
+            log.debug("Archivos descargados:" + ",".join(files))
+
         if len(files) == 0:
             return None
 
@@ -54,14 +63,18 @@ def inpi_novedades(driver,
             fecha = cols[3].text
 
             log.info(f"[{i}/{total}] Solicitud: {solicitud} tipo: {tipo}")
-
-
+            new_file = None
             try:
-                cols[4].click()
-                log.debug("Encontramos documento y hacemos click sobre el botón de descarga")
+
+                #stop_downloads_and_remove_files(temp_download_folder)
+
+                a = cols[4].find_element(By.TAG_NAME, "a")
+                descarga = a.get_attribute('download')
+                a.click()
+                log.debug(f"Click de la descarga, se espera el archivo: {descarga}")
                 latest_downloaded_filename = get_last_downloaded_file_path(
                     temp_download_folder,
-                    "pdf",
+                    descarga,
                     big_timeout)
 
                 if latest_downloaded_filename:
@@ -97,7 +110,6 @@ def inpi_novedades(driver,
                               "Error." + str(err)))
 
         return files
-
 
     def _novedades():
         """Recuperación de notificaciones del INPI por fecha
