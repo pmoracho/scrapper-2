@@ -30,7 +30,7 @@ class Log:
     def exception(self, msg):
         """Log nivel excption"""
         if not self.quiet:
-            print(f"!!!Se ha producido una excepción {msg}")
+            print(f"!!!Se ha producido una excepción: {msg}")
 
         logging.exception(msg.replace("|", " "))
 

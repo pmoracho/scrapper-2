@@ -25,7 +25,8 @@ def dummy_download_file(driver,
                         inputfile=None,
                         tmpdir=os.getcwd(),
                         inputparam=None,
-                        outputpath=None):
+                        outputpath=None,
+                        show_browser=False):
     """Descarga dummy de prueba
     """
     log.info(f"Descarga dummy de un archivo en la carpeta {outputpath}")

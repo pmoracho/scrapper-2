@@ -16,7 +16,8 @@ def zonaprop(driver,
             inputfile=None,
             tmpdir=os.getcwd(),
             inputparam=None,
-            outputpath=None):
+            outputpath=None,
+            show_browser=False):
 
     def _get_element(xpath):
         try:

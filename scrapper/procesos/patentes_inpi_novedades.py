@@ -28,7 +28,8 @@ def patentes_inpi_novedades(driver,
                             inputfile=None,
                             tmpdir=os.getcwd(),
                             inputparam=None,
-                            outputpath=None):
+                            outputpath=None,
+                            show_browser=False):
     """Descarga de archivos de novedades de patendes del INPI
     Parametros requeriods:
 

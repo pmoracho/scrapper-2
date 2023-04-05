@@ -67,11 +67,12 @@ def scrap(proceso,
                             inputfile=inputfile,
                             tmpdir=workpath,
                             inputparam=inputparam,
-                            outputpath=outputpath)
+                            outputpath=outputpath,
+                            show_browser = show_browser)
 
         # pylint: disable=broad-except
-        except Exception:
-            log.exception("al ejecutar scrap()")
+        except Exception as err:
+            log.exception(str(err))
 
     else:
         log.error(f"proceso {function_name} no implementado")
