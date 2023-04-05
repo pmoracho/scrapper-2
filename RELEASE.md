@@ -1,13 +1,15 @@
 # Descripción
 
-* Fix del problema de identificación de archivo descargado cuando se cumple timeout
-* Aumentamos el `big_timeout` en 120 segundos
-* Tramiento de excepción al salvar resultados (`PermissionError`)
-* Agregamos más info al log en modo debug
+* `inpi_novedades`: implementamos el modo interactivo para solucionar el tema
+  de las credenciales. En caso de no indicarlas se deberá usar el modo
+  interactivo (`-b`) de forma obligatoria y el navegador esperará un número
+  predefinido de segundos a que el usuario haga el login, si se completa con
+  éxito, el navegador se minimizará y continuará el proceso normalmente.
+
 
 # Despliegue
 
-* Requerimieto inicial: Tener instalado un navegador **Chrome**
+* Requerimiento inicial: Tener instalado un navegador **Chrome**
 * Descargar `win_release.zip`
 * Descomprimir el contenido, se genera una carpeta `scrapper`
 * **Importante**:
@@ -28,6 +30,9 @@ Para el login mediante AFIP:
 * cuit/cuil
 * contraseña
 
+En caso de no querer pasar estos datos, dejar en blanco los mismos, y se deberá
+ingresar estos de forma manual en el navegador.
+
 Para la consulta:
 
 * fecha desde: formato `DD/MM/YYYY`
@@ -43,6 +48,10 @@ error al intentarlo.
 La ejecución sería algo así:
 
     scrapper inpi_novedades -p "cuil/cuit|contraseña|fecha desde|fecha hasta|*|*" -f carpeta_accesible_por_mecanus\resumen.csv -t csv -l carpeta_accesible_por_mecanus\scrapper.log
+
+O bien, sin para no pasar credenciales:
+
+    scrapper inpi_novedades -p "||fecha desde|fecha hasta|*|*" -f carpeta_accesible_por_mecanus\resumen.csv -t csv -l carpeta_accesible_por_mecanus\scrapper.log
 
 La salida en `resumen.csv` sería algo así:
 
