@@ -17,7 +17,8 @@ def inpi_novedades(driver,
                 inputfile=None,
                 tmpdir=os.getcwd(),
                 inputparam=None,
-                outputpath=None):
+                outputpath=None,
+                show_browser=False):
     """Descarga de archivos de novedades del INPI
     Parametros requeriod0s:
 
@@ -65,8 +66,6 @@ def inpi_novedades(driver,
             log.info(f"[{i}/{total}] Solicitud: {solicitud} tipo: {tipo}")
             new_file = None
             try:
-
-                #stop_downloads_and_remove_files(temp_download_folder)
 
                 a = cols[4].find_element(By.TAG_NAME, "a")
                 descarga = a.get_attribute('download')
@@ -119,7 +118,6 @@ def inpi_novedades(driver,
         log.debug(f"Get: {url}")
         driver.get(url)
 
-
         log.debug(parametros["btn_inicio_sesion"])
         btn_inicio = WebDriverWait(driver, small_timeout).until(
             EC.visibility_of_element_located(
@@ -127,29 +125,33 @@ def inpi_novedades(driver,
         )
         btn_inicio.click()
 
-        log.debug("completamos usuario")
-        txt_usuario = WebDriverWait(driver, small_timeout).until(
-            EC.visibility_of_element_located(
-                (By.ID, parametros["txt_usuario"]))
-        )
-        txt_usuario.send_keys(cuil_cuit)
-        txt_usuario.send_keys(Keys.RETURN)
+        if cuil_cuit:
+            log.debug("completamos usuario")
+            txt_usuario = WebDriverWait(driver, small_timeout).until(
+                EC.visibility_of_element_located(
+                    (By.ID, parametros["txt_usuario"]))
+            )
+            txt_usuario.send_keys(cuil_cuit)
+            txt_usuario.send_keys(Keys.RETURN)
 
-        log.debug("completamos contraseña")
-        txt_password = WebDriverWait(driver, small_timeout).until(
-            EC.visibility_of_element_located(
-                (By.ID, parametros["txt_password"]))
-        )
-        txt_password.send_keys(password)
-        txt_password.send_keys(Keys.RETURN)
-        log.debug("Realizamos login")
+        if password:
+            log.debug("completamos contraseña")
+            txt_password = WebDriverWait(driver, small_timeout).until(
+                EC.visibility_of_element_located(
+                    (By.ID, parametros["txt_password"]))
+            )
+            txt_password.send_keys(password)
+            txt_password.send_keys(Keys.RETURN)
+            log.debug("Realizamos login")
 
         log.debug("Cambiamos a MARVAL")
-        btn_cambiar = WebDriverWait(driver, small_timeout).until(
+        btn_cambiar = WebDriverWait(driver, big_timeout).until(
             EC.visibility_of_element_located(
                 (By.XPATH, parametros["btn_cambiar"]))
         )
         btn_cambiar.click()
+
+        driver.minimize_window()
 
         log.debug("Vamos a la página de notificaciones")
         url = parametros["url_notificaciones"]
@@ -200,6 +202,11 @@ def inpi_novedades(driver,
     small_timeout =int(parametros["small_timeout"])
 
     cuil_cuit, password, fecha_desde, fecha_hasta, expediente, notificacion = inputparam.split("|")
+    if (cuil_cuit == "" or password == "") and show_browser is False:
+        raise AttributeError(
+            "Si no se indican las credenciales de login la ejecución debe ser interactiva (-b)"
+        )
+
     log.info(f"Leyendo {expediente}-{notificacion} desde: {fecha_desde} hasta {fecha_hasta}")
 
     datos = None
