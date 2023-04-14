@@ -10,6 +10,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import TimeoutException
 
 def inpi_novedades(driver,
                 parametros,
@@ -151,7 +152,8 @@ def inpi_novedades(driver,
         )
         btn_cambiar.click()
 
-        driver.minimize_window()
+        if show_browser and (not password or not cuil_cuit):
+            driver.minimize_window()
 
         log.debug("Vamos a la página de notificaciones")
         url = parametros["url_notificaciones"]
@@ -176,7 +178,7 @@ def inpi_novedades(driver,
 
         if notificacion != "*":
             select = Select(driver.find_element("id", parametros["notificacion_combo"]))
-            select.select_by_visible_text(notificacion)
+            select.select_by_value(notificacion)
 
         btn_buscar = WebDriverWait(driver, big_timeout).until(
             EC.visibility_of_element_located(
@@ -185,10 +187,14 @@ def inpi_novedades(driver,
         log.debug("Realizamos busqueda")
         btn_buscar.click()
 
-        rows = WebDriverWait(driver, big_timeout).until(
-            EC.visibility_of_all_elements_located(
-                (By.XPATH, parametros["grilla"]))
-        )
+        try:
+            rows = WebDriverWait(driver, big_timeout).until(
+                EC.visibility_of_all_elements_located(
+                    (By.XPATH, parametros["grilla"]))
+            )
+        except TimeoutException:
+            log.info("No se han encontrado resultados")
+            return None
 
         datos = None
         number_of_rows = len(rows)
@@ -211,7 +217,7 @@ def inpi_novedades(driver,
 
     datos = None
     try:
-        datos = _novedades()
+        datos = _novedades(cuil_cuit, password, fecha_desde, fecha_hasta, expediente, notificacion, show_browser)
     # pylint: disable=broad-exception-caught
     except Exception as err:
         log.exception(str(err))

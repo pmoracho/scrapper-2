@@ -1,11 +1,9 @@
 # Descripción
 
-* `inpi_novedades`: implementamos el modo interactivo para solucionar el tema
-  de las credenciales. En caso de no indicarlas se deberá usar el modo
-  interactivo (`-b`) de forma obligatoria y el navegador esperará un número
-  predefinido de segundos a que el usuario haga el login, si se completa con
-  éxito, el navegador se minimizará y continuará el proceso normalmente.
+`inpi_novedades`:
 
+* Parámetro de tipo de notificación, ahora se utiliza el `option_value` o valor numérico. Ver [notas](doc/Notas.md)
+* Mejoramos el caso de grilla sin resultados
 
 # Despliegue
 
@@ -38,7 +36,8 @@ Para la consulta:
 * fecha desde: formato `DD/MM/YYYY`
 * fecha hasta: formato `DD/MM/YYYY`
 * expediente: tal como figura el dropbox del la página, eventualmente "*" = todos
-* tipo de notificacion: tal como figura el dropbox del la página, eventualmente "*" = todos
+* tipo de notificacion: tal como figura el `option_value` del dropbox del la página,
+  eventualmente "*" = todos o por ejemplo `4177` para `CONFIRMACIÓN DE ENVÍO`
 
 
 Además se debería contar con una carpeta vacía dónde generar el resumen de la
@@ -49,7 +48,7 @@ La ejecución sería algo así:
 
     scrapper inpi_novedades -p "cuil/cuit|contraseña|fecha desde|fecha hasta|*|*" -f carpeta_accesible_por_mecanus\resumen.csv -t csv -l carpeta_accesible_por_mecanus\scrapper.log
 
-O bien, sin para no pasar credenciales:
+O bien, sin pasar credenciales:
 
     scrapper inpi_novedades -p "||fecha desde|fecha hasta|*|*" -f carpeta_accesible_por_mecanus\resumen.csv -t csv -l carpeta_accesible_por_mecanus\scrapper.log
 
