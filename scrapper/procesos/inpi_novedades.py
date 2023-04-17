@@ -111,7 +111,7 @@ def inpi_novedades(driver,
 
         return files
 
-    def _novedades():
+    def _novedades(cuil_cuit, password, fecha_desde, fecha_hasta, expediente, notificacion, show_browser):
         """Recuperación de notificaciones del INPI por fecha
         """
 
