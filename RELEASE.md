@@ -2,8 +2,14 @@
 
 `inpi_novedades`:
 
-* Parámetro de tipo de notificación, ahora se utiliza el `option_value` o valor numérico. Ver [notas](doc/Notas.md)
-* Mejoramos el caso de grilla sin resultados
+* Modificamos estrategia de carga de páginas para optimizar tiempos,
+  particularmente con la carga inicial de cada url, dejamos de esperar
+  la carga completa.
+* Mejoramos los tiempos cuando debemos detectar que no hay resultados
+* Mejora en el Log, más detalle sin necesidad de usar el modo debug
+
+
+[Notas](doc/Notas.md)
 
 # Despliegue
 
