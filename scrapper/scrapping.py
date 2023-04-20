@@ -4,6 +4,9 @@ import tempfile
 import os
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+
+
 
 # pylint: disable=unused-import
 from scrapper.procesos.patentes_inpi_novedades import patentes_inpi_novedades
@@ -28,7 +31,14 @@ def get_chrome_driver(download_folder, show=False):
         'safebrowsing.disable_download_protection': True
     })
     chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    driver = webdriver.Chrome(options=chrome_options)
+
+    caps = DesiredCapabilities().CHROME
+    #caps["pageLoadStrategy"] = "normal"  #  complete
+    #caps["pageLoadStrategy"] = "eager"  #  interactive
+    caps["pageLoadStrategy"] = "none"
+
+    driver = webdriver.Chrome(options=chrome_options, desired_capabilities=caps)
+
     return driver
 
 
