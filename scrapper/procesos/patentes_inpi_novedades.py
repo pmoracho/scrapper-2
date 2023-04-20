@@ -90,7 +90,7 @@ def patentes_inpi_novedades(driver,
             # log.info(f"Texto encontrado {col.text}")
             if col.text == tipo_doc:
                 descarga_xpath = parametros["grilla"] + f"/tr[{i}]/td[1]/a"
-                log.debug(f"Descargando desde {descarga_xpath}")
+                log.info_internal(f"Descargando desde {descarga_xpath}")
 
                 btn = WebDriverWait(driver, 5).until(
                     EC.visibility_of_element_located(
@@ -99,7 +99,7 @@ def patentes_inpi_novedades(driver,
 
                 # file = btn.get_property("href").split("=")[2]
                 btn.click()
-                log.debug(
+                log.info_internal(
                     "Encontramos documento y hacemos click sobre el botón de descarga")
 
                 latest_downloaded_filename = get_last_downloaded_file_path(
@@ -116,7 +116,7 @@ def patentes_inpi_novedades(driver,
                         f"{solicitud_a_buscar}-{tipo_doc}-{nfile}{file_extension}"
                     )
                     shutil.move(latest_downloaded_filename, new_file)
-                    log.debug(f"Movemos {latest_downloaded_filename} a {new_file}")
+                    log.info_internal(f"Movemos {latest_downloaded_filename} a {new_file}")
                     files.append(os.path.join(new_file))
                 else:
                     files = []
@@ -151,7 +151,7 @@ def patentes_inpi_novedades(driver,
                 )
             else:
                 for file in files:
-                    log.debug(f"archivo descargado y renombrado: {file}")
+                    log.info_internal(f"archivo descargado y renombrado: {file}")
                     if is_a_pdf(file):
                         datos.append((solicitud_a_buscar, tipo_doc,
                                     file, "OK: Descarga exitosa"))
@@ -169,6 +169,6 @@ def patentes_inpi_novedades(driver,
         i = i + 1
 
     driver.quit()
-    log.debug("Fin del proceso de descarga, retornamos los datos.")
+    log.info_internal("Fin del proceso de descarga, retornamos los datos.")
 
     return datos

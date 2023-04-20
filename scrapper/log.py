@@ -23,6 +23,10 @@ class Log:
 
         logging.info(msg.replace("|", " "))
 
+    def info_internal(self, msg):
+        """Log nivel info interna"""
+        logging.info(msg.replace("|", " "))
+
     def debug(self, msg):
         """Log nivel debug"""
         logging.debug(msg.replace("|", " "))
