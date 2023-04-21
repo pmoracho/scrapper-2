@@ -52,22 +52,12 @@ def inpi_novedades(driver,
 
         return max(files, key=os.path.getctime)
 
-    def _descarga_clcik(btn, xpath):
-        try:
-            btn.click()
-        except ElementClickInterceptedException:
-            btn = WebDriverWait(driver, big_timeout).until(
-                                EC.element_to_be_clickable((By.XPATH, xpath))
-                            )
-            btn.click()
-
-
-    def _download_files(rows):
-
-        temp_download_folder = os.path.join(outputpath, "tmp")
-        files = [("Solicitud", "Tipo", "Fecha", "Archivo", "Estatus")]
-        total = len(rows)
-
+    def get_download_urls_list(rows):
+        """get_download_urls_list
+           Retorna una lista de los links de descarga de la tabla de notificaciones
+           rows: lista de filas de la tabal de notificaciones
+        """
+        files = []
         for i, row in enumerate(rows, 1):
 
             cols = row.find_elements(By.TAG_NAME, "td")
@@ -75,21 +65,42 @@ def inpi_novedades(driver,
             tipo = cols[1].get_attribute("textContent")
             fecha = cols[3].text
 
-            new_file = None
+            descarga_xpath = parametros["descarga"].replace("{id}", str(i))
             try:
-                descarga_xpath = parametros["descarga"].replace("{id}", str(i))
-
                 btn_decarga = WebDriverWait(driver, big_timeout).until(
                                     EC.element_to_be_clickable((By.XPATH, descarga_xpath))
                                 )
-
-                log.info_internal(f"Encontramos el botón de click de la fila {i}")
                 descarga = btn_decarga.get_attribute('download')
-                log.info_internal(f"Intentamos hacer click")
+                url = btn_decarga.get_attribute('href')
 
-                _descarga_clcik(btn_decarga, descarga_xpath)
+            # pylint: disable=broad-exception-caught
+            except Exception as err:
+                log.exception(str(err))
 
-                log.info_internal(f"Click de la descarga, se espera el archivo: {descarga}")
+            files.append((solicitud,
+                        tipo,
+                        fecha,
+                        url,
+                        descarga))
+
+        return files
+
+
+    def download_files(rows):
+        """download_files
+           Descarga archivos de una lista de norificaciones
+        """
+        temp_download_folder = os.path.join(outputpath, "tmp")
+        files = [("Solicitud", "Tipo", "Fecha", "Archivo", "Estatus")]
+        total = len(rows)
+
+        for i, row in enumerate(rows, 1):
+
+            solicitud, tipo, fecha, url, descarga = row
+            new_file = None
+            try:
+                log.info_internal(f"Descargando desde: {url}")
+                driver.get(url)
                 latest_downloaded_filename = get_last_downloaded_file_path(
                     temp_download_folder,
                     descarga,
@@ -108,7 +119,6 @@ def inpi_novedades(driver,
                     status = "Ok. Descarga exitosa."
                 else:
                     status = "Error. No se pudo completar la descarga (1)"
-
 
             # pylint: disable=broad-exception-caught
             except Exception as err:
@@ -219,17 +229,12 @@ def inpi_novedades(driver,
             log.info("No se han encontrado resultados")
             return None
 
-        with open(tmpdir + "/resultados.html", "w", encoding="utf-8") as mypage:
-            mypage.write(driver.page_source)
-            mypage.close()
-
-        driver.get(tmpdir + "/resultados.html")
-
         datos = None
         number_of_rows = len(rows)
         log.info(f"Encontramos {number_of_rows} notificaciones")
         if number_of_rows > 0:
-            datos = _download_files(rows)
+            links = get_download_urls_list(rows)
+            datos = download_files(links)
 
         log.info_internal("Finalizamos proceso de novedades, datos: " + str(len(datos)))
         return datos
