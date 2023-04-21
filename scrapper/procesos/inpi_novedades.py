@@ -67,14 +67,14 @@ def inpi_novedades(driver,
 
             new_file = None
             try:
+                descarga = parametros["descarga"].replace("{id}", str(i))
 
-                # a = WebDriverWait(driver, small_timeout).until(
-                #                     cols[4].element_to_be_clickable((By.TAG_NAME, "a"))
-                #                 )
+                btn_decarga = WebDriverWait(driver, big_timeout).until(
+                                    EC.element_to_be_clickable((By.XPATH, descarga))
+                                )
 
-                a = cols[4].find_element(By.TAG_NAME, "a")
-                descarga = a.get_attribute('download')
-                a.click()
+                descarga = btn_decarga.get_attribute('download')
+                btn_decarga.click()
                 log.info_internal(f"Click de la descarga, se espera el archivo: {descarga}")
                 latest_downloaded_filename = get_last_downloaded_file_path(
                     temp_download_folder,
