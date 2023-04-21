@@ -189,9 +189,12 @@ def main():
             log.error(errormsg)
             sys.exit(-1)
 
+    elapsed_time = time.strftime('%H:%M:%S', time.gmtime(round(time.time() - start_time, 2)))
+
     # Retornamos los resultados del proceso
     #
     n_rows = 0
+    success = 0
     if datos:
         n_rows = len(datos) - 1
         if n_rows > 0:
@@ -201,5 +204,7 @@ def main():
                         args.outputtype,
                         datos)
 
-    elapsed_time = time.strftime('%H:%M:%S', time.gmtime(round(time.time() - start_time, 2)))
-    log.info(f"Se salvaron {n_rows} filas en {elapsed_time}")
+            success = len([row[3] for row in datos if "Ok." in row[4]])
+
+    errors = n_rows - success
+    log.info(f"Se salvaron {n_rows} filas en {elapsed_time} (Ok: {success} Error: {errors})")

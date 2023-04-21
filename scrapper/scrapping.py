@@ -82,6 +82,7 @@ def scrap(proceso,
 
         # pylint: disable=broad-except
         except Exception as err:
+            log.exception("General en la invocación a la función de scrapping")
             log.exception(str(err))
 
     else:
