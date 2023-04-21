@@ -219,6 +219,12 @@ def inpi_novedades(driver,
             log.info("No se han encontrado resultados")
             return None
 
+        with open(tmpdir + "/resultados.html", "w", encoding="utf-8") as mypage:
+            mypage.write(driver.page_source)
+            mypage.close()
+
+        driver.get(tmpdir + "/resultados.html")
+
         datos = None
         number_of_rows = len(rows)
         log.info(f"Encontramos {number_of_rows} notificaciones")
