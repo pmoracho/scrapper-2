@@ -54,7 +54,11 @@ class Config:
                 self._load(self.override_section)
 
     def _load(self, section):
+        """Carga en memoria una sección del archivo de configuración
 
+        Args:
+            section (str): Nombre de la seció
+        """
         self.config.read_file(self.file)
         items_ini = self.config.items(section)
 

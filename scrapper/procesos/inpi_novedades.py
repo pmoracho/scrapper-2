@@ -11,7 +11,6 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import TimeoutException
-from selenium.common.exceptions import ElementClickInterceptedException
 
 def inpi_novedades(driver,
                 parametros,
@@ -34,7 +33,8 @@ def inpi_novedades(driver,
         """
         elapsed_time = 0
         contains = contains.lower()
-        while not any(os.path.isfile(os.path.join(dummy_dir, f)) and contains == f.lower() for f in os.listdir(dummy_dir)) and elapsed_time < time_to_wait:
+        while not any(os.path.isfile(os.path.join(dummy_dir, f)) and contains == f.lower()
+                        for f in os.listdir(dummy_dir)) and elapsed_time < time_to_wait:
             # log.info_internal(f"contains: *{contains}*")
             # log.info_internal("Archivos:" + ", ".join(os.listdir(dummy_dir)))
             time.sleep(1)  # esperar 1 segundo
@@ -134,10 +134,28 @@ def inpi_novedades(driver,
 
         return files
 
-    def _novedades(cuil_cuit, password, fecha_desde, fecha_hasta, expediente, notificacion, show_browser):
-        """Recuperación de notificaciones del INPI por fecha
-        """
+    def novedades(cuil_cuit,
+                  password,
+                  fecha_desde,
+                  fecha_hasta,
+                  expediente,
+                  notificacion,
+                  show_browser):
+        """Recuperación de notificaciones del INPI
 
+        Args:
+            cuil_cuit (str): cuil/cuit de login de afip. Puede ser "".
+            password (str): contraseña de acceso al afip. Puede ser "".
+            fecha_desde (str): Fecha desde para la consulta de notificaciones
+            fecha_hasta (str): Fecha hastapara la consulta de notificaciones
+            expediente (str): Datos del tipo de expediente (* para todos)
+            notificacion (str): Tipo de notificación. Corresponde al optin_value
+                                   del combo, no la descripción. (* para todos)
+            show_browser (bool): Se muestra el navegador durante el proceso.
+
+        Returns:
+            List: Lista de datos obtenidos, puede ser una lista vacía.
+        """
         url = parametros["url_home"]
         log.info_internal(f"Get: {url}")
         driver.get(url)
@@ -181,7 +199,7 @@ def inpi_novedades(driver,
         log.info_internal("Vamos a la página de notificaciones")
         url = parametros["url_notificaciones"]
 
-        driver.get(url);
+        driver.get(url)
         log.info_internal("Esperamos filtros de búsqueda")
         txt_desde = WebDriverWait(driver, big_timeout).until(
             EC.visibility_of_element_located(
@@ -252,13 +270,13 @@ def inpi_novedades(driver,
 
     datos = None
     try:
-        datos = _novedades(cuil_cuit,
-                        password,
-                        fecha_desde,
-                        fecha_hasta,
-                        expediente,
-                        notificacion,
-                        show_browser)
+        datos = novedades(cuil_cuit,
+                          password,
+                          fecha_desde,
+                          fecha_hasta,
+                          expediente,
+                          notificacion,
+                          show_browser)
 
     # pylint: disable=broad-exception-caught
     except Exception as err:

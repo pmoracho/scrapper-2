@@ -16,6 +16,13 @@ from scrapper.procesos.inpi_novedades import inpi_novedades
 
 def get_chrome_driver(download_folder, show=False):
     """Configura y retorna el driver chrome
+
+    Args:
+        download_folder (str): Carpeta de descarga deseada
+        show (bool): Establece si se muestra la operación en el navegador
+
+    Returns:
+        driver: retorna el objeto driver
     """
 
     chrome_options = Options()
@@ -49,9 +56,23 @@ def scrap(proceso,
           inputfile=None,
           outputpath = None,
           show_browser=False):
-    """Ejecución de un proceso de scrapping
+    """Ejecución generica de un proceso  modelo de scrapping
+
+    Args:
+        proceso (str): Nombre del proceps
+        config (Config): Objeto de Configuración
+        log (Log): Objeto de Logging
+        inputparam (str, optional): Cadena variable de parámetros dada por el usuario.
+                                    Defaults to None.
+        inputfile (str, optional): Archivo de entrada. Defaults to None.
+        outputpath (str, optional): Carpeta de salida de los resultados. Defaults to None.
+        show_browser (bool, optional): Se muestra muestra el navegador durante el proceso
+                                       de scrapping.
+                                       Defaults to False.
+
+    Returns:
+        List: Lista de valores capturados
     """
-    datos = []
 
     if outputpath is None:
         workpath = tempfile.mkdtemp()
@@ -64,8 +85,9 @@ def scrap(proceso,
     log.info(f"Carpeta de descarga: {temp_download_folder}")
     driver = get_chrome_driver(download_folder=temp_download_folder, show=show_browser)
 
-    section        = "proc:" + proceso
-    function_name  = config[section]["function"]
+    section         = "proc:" + proceso
+    function_name   = config[section]["function"]
+    datos           = []
     if function_name in globals():
         function = globals()[function_name]
         log.info(f"Invocando a: {function_name}")
