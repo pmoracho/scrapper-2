@@ -11,6 +11,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import ElementClickInterceptedException
 
 def inpi_novedades(driver,
                 parametros,
@@ -105,15 +106,27 @@ def inpi_novedades(driver,
 
         for i, row in enumerate(rows, 1):
 
-            # Simulamos actividad
-            if i % 3 is 0:
-                simulate_activity()
-
             solicitud, tipo, fecha, url, descarga = row
             new_file = None
             try:
                 log.info_internal(f"Descargando desde: {url}")
-                driver.get(url)
+
+                descarga_xpath = parametros["descarga"].replace("{id}", str(i))
+
+                btn_decarga = WebDriverWait(driver, big_timeout).until(
+                                    EC.element_to_be_clickable((By.XPATH, descarga_xpath))
+                                )
+
+                log.info_internal(f"Encontramos el botón de click de la fila {i}")
+                try:
+                    btn_decarga.click()
+                except ElementClickInterceptedException:
+                    btn_decarga = WebDriverWait(driver, big_timeout).until(
+                                        EC.element_to_be_clickable((By.XPATH, descarga_xpath))
+                                    )
+                    btn_decarga.click()
+
+                # driver.get(url)
                 latest_downloaded_filename = get_last_downloaded_file_path(
                     temp_download_folder,
                     descarga,
