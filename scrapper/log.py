@@ -42,4 +42,3 @@ class Log:
             print(f"!!!Se ha producido un error {msg}")
 
         logging.error(msg.replace("|", " "))
-

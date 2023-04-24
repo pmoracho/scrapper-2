@@ -85,6 +85,15 @@ def inpi_novedades(driver,
 
         return files
 
+    def simulate_activity():
+        try:
+            btn_inicio = WebDriverWait(driver, small_timeout).until(
+                EC.visibility_of_element_located(
+                    (By.XPATH, parametros["inicio"]))
+            )
+            btn_inicio.click()
+        except Exception as err:
+            log.exception(str(err))
 
     def download_files(rows):
         """download_files
@@ -95,6 +104,9 @@ def inpi_novedades(driver,
         total = len(rows)
 
         for i, row in enumerate(rows, 1):
+
+            # Simulamos actividad
+            simulate_activity()
 
             solicitud, tipo, fecha, url, descarga = row
             new_file = None
