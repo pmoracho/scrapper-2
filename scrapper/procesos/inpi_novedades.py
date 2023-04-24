@@ -106,7 +106,8 @@ def inpi_novedades(driver,
         for i, row in enumerate(rows, 1):
 
             # Simulamos actividad
-            simulate_activity()
+            if i % 3 is 0:
+                simulate_activity()
 
             solicitud, tipo, fecha, url, descarga = row
             new_file = None

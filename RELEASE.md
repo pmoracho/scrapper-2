@@ -5,6 +5,7 @@
 * Modificamos estrategia de carga de páginas para optimizar tiempos,
   particularmente con la carga inicial de cada url, dejamos de esperar
   la carga completa.
+* Simulamos actividad cada 3 descargas para evitar fin de sesión
 * Mejoramos los tiempos cuando debemos detectar que no hay resultados
 * Mejora en el Log, más detalle sin necesidad de usar el modo debug
 * Agregamos espera a que cada botón de descarga sea clickeable
