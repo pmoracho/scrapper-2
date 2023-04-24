@@ -82,19 +82,10 @@ def inpi_novedades(driver,
                         tipo,
                         fecha,
                         url,
-                        descarga))
+                        descarga,
+                        descarga_xpath))
 
         return files
-
-    def simulate_activity():
-        try:
-            btn_inicio = WebDriverWait(driver, small_timeout).until(
-                EC.visibility_of_element_located(
-                    (By.XPATH, parametros["inicio"]))
-            )
-            btn_inicio.click()
-        except Exception as err:
-            log.exception(str(err))
 
     def download_files(rows):
         """download_files
@@ -106,17 +97,25 @@ def inpi_novedades(driver,
 
         for i, row in enumerate(rows, 1):
 
-            solicitud, tipo, fecha, url, descarga = row
+            solicitud, tipo, fecha, url, descarga, descarga_xpath = row
             new_file = None
+
+            # Esta el popup de fin de sesión -> click en continuar
+            try:
+                btn_continuar = WebDriverWait(driver, 1).until(
+                                    EC.element_to_be_clickable((By.XPATH, parametros["btn_continuar"]))
+                                )
+                btn_continuar.click()
+                log.info_internal("Tenemos Popup entonces Click en Continuar")
+            except Exception:
+                pass
+
+            # Descarga
             try:
                 log.info_internal(f"Descargando desde: {url}")
-
-                descarga_xpath = parametros["descarga"].replace("{id}", str(i))
-
                 btn_decarga = WebDriverWait(driver, big_timeout).until(
                                     EC.element_to_be_clickable((By.XPATH, descarga_xpath))
                                 )
-
                 log.info_internal(f"Encontramos el botón de click de la fila {i}")
                 try:
                     btn_decarga.click()
@@ -160,28 +159,17 @@ def inpi_novedades(driver,
 
         return files
 
-    def novedades(cuil_cuit,
-                  password,
-                  fecha_desde,
-                  fecha_hasta,
-                  expediente,
-                  notificacion,
-                  show_browser):
-        """Recuperación de notificaciones del INPI
+    def change_to_mom():
 
-        Args:
-            cuil_cuit (str): cuil/cuit de login de afip. Puede ser "".
-            password (str): contraseña de acceso al afip. Puede ser "".
-            fecha_desde (str): Fecha desde para la consulta de notificaciones
-            fecha_hasta (str): Fecha hastapara la consulta de notificaciones
-            expediente (str): Datos del tipo de expediente (* para todos)
-            notificacion (str): Tipo de notificación. Corresponde al optin_value
-                                   del combo, no la descripción. (* para todos)
-            show_browser (bool): Se muestra el navegador durante el proceso.
+        log.info_internal("Cambiamos a MARVAL")
+        btn_cambiar = WebDriverWait(driver, big_timeout).until(
+            EC.visibility_of_element_located(
+                (By.XPATH, parametros["btn_cambiar"]))
+        )
+        btn_cambiar.click()
 
-        Returns:
-            List: Lista de datos obtenidos, puede ser una lista vacía.
-        """
+    def login(cuil_cuit, password):
+
         url = parametros["url_home"]
         log.info_internal(f"Get: {url}")
         driver.get(url)
@@ -212,15 +200,10 @@ def inpi_novedades(driver,
             txt_password.send_keys(Keys.RETURN)
             log.info_internal("Realizamos login")
 
-        log.info_internal("Cambiamos a MARVAL")
-        btn_cambiar = WebDriverWait(driver, big_timeout).until(
-            EC.visibility_of_element_located(
-                (By.XPATH, parametros["btn_cambiar"]))
-        )
-        btn_cambiar.click()
-
-        if show_browser and (not password or not cuil_cuit):
-            driver.minimize_window()
+    def do_search(fecha_desde,
+                  fecha_hasta,
+                  expediente,
+                  notificacion):
 
         log.info_internal("Vamos a la página de notificaciones")
         url = parametros["url_notificaciones"]
@@ -257,6 +240,8 @@ def inpi_novedades(driver,
         log.info_internal("Realizamos busqueda")
         btn_buscar.click()
 
+    def found_rows():
+
         log.info_internal("Aguardamos por el falso paginador")
         _ = WebDriverWait(driver, big_timeout).until(
             EC.visibility_of_all_elements_located(
@@ -273,10 +258,45 @@ def inpi_novedades(driver,
             log.info("No se han encontrado resultados")
             return None
 
+        return rows
+
+    def novedades(cuil_cuit,
+                  password,
+                  fecha_desde,
+                  fecha_hasta,
+                  expediente,
+                  notificacion,
+                  show_browser):
+        """Recuperación de notificaciones del INPI
+
+        Args:
+            cuil_cuit (str): cuil/cuit de login de afip. Puede ser "".
+            password (str): contraseña de acceso al afip. Puede ser "".
+            fecha_desde (str): Fecha desde para la consulta de notificaciones
+            fecha_hasta (str): Fecha hastapara la consulta de notificaciones
+            expediente (str): Datos del tipo de expediente (* para todos)
+            notificacion (str): Tipo de notificación. Corresponde al optin_value
+                                   del combo, no la descripción. (* para todos)
+            show_browser (bool): Se muestra el navegador durante el proceso.
+
+        Returns:
+            List: Lista de datos obtenidos, puede ser una lista vacía.
+        """
+
+        login(cuil_cuit, password)
+        change_to_mom()
+
+        if show_browser and (not password or not cuil_cuit):
+            driver.minimize_window()
+
+        do_search(fecha_desde, fecha_hasta, expediente, notificacion)
+
         datos = None
-        number_of_rows = len(rows)
-        log.info(f"Encontramos {number_of_rows} notificaciones")
-        if number_of_rows > 0:
+
+        rows = found_rows()
+        if rows:
+            number_of_rows = len(rows)
+            log.info(f"Encontramos {number_of_rows} notificaciones")
             links = get_download_urls_list(rows)
             datos = download_files(links)
 
