@@ -6,6 +6,7 @@
 * Mejoramos los tiempos cuando debemos detectar que no hay resultados
 * Mejora en el Log, más detalle sin necesidad de usar el modo debug
 * Agregamos espera a que cada botón de descarga sea clickeable
+* Confirmamos el diálogo de sesión
 
 [Notas](doc/Notas.md)
 
