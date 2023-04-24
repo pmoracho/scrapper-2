@@ -30,6 +30,7 @@ def get_chrome_driver(download_folder, show=False):
         chrome_options.add_argument("--headless=new")
 
     chrome_options.add_argument(f"--download-directory={download_folder}")
+    chrome_options.add_argument("--start-maximized")
     chrome_options.add_experimental_option("prefs", {
         "download.prompt_for_download": False,
         "download.directory_upgrade": True,
